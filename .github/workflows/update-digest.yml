@@ -1,0 +1,63 @@
+name: Update AI Digest
+
+on:
+  schedule:
+    # Morning update: 8 AM ET (1 PM UTC)
+    - cron: '0 13 * * *'
+    # Evening update: 6 PM ET (11 PM UTC)
+    - cron: '0 23 * * *'
+  
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  update-digest:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Trigger Morning Digest Update
+        if: github.event.schedule == '0 13 * * *'
+        run: |
+          echo "🌅 Triggering morning AI digest update..."
+          curl -f -X GET "https://vidyagam.com/api/digest?refresh=1&source=github-morning" \
+            -H "User-Agent: GitHub-Actions-Digest-Bot/1.0" \
+            --max-time 30 \
+            --retry 3 \
+            --retry-delay 5
+
+      - name: Trigger Evening Digest Update  
+        if: github.event.schedule == '0 23 * * *'
+        run: |
+          echo "🌙 Triggering evening AI digest update..."
+          curl -f -X GET "https://vidyagam.com/api/digest?refresh=1&source=github-evening" \
+            -H "User-Agent: GitHub-Actions-Digest-Bot/1.0" \
+            --max-time 30 \
+            --retry 3 \
+            --retry-delay 5
+
+      - name: Manual Trigger
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "🔄 Manual digest update triggered..."
+          curl -f -X GET "https://vidyagam.com/api/digest?refresh=1&source=github-manual" \
+            -H "User-Agent: GitHub-Actions-Digest-Bot/1.0" \
+            --max-time 30 \
+            --retry 3 \
+            --retry-delay 5
+
+      - name: Health Check
+        run: |
+          echo "🏥 Checking API health..."
+          response=$(curl -s -o /dev/null -w "%{http_code}" "https://vidyagam.com/api/digest")
+          if [ $response -eq 200 ]; then
+            echo "✅ API is healthy (HTTP $response)"
+          else
+            echo "❌ API returned HTTP $response"
+            exit 1
+          fi
+
+      - name: Notify on Failure
+        if: failure()
+        run: |
+          echo "❌ Digest update failed. Check the logs above for details."
+          echo "The AI Digest API at vidyagam.com may need attention."
