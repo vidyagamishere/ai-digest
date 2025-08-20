@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Daily â€¢ vidyagam.com</title>
+    <meta name="description" content="Stay updated with the latest AI developments - curated and summarized by AI">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --accent: #06b6d4;
+            --background: #ffffff;
+            --background-secondary: #f8fafc;
+            --background-tertiary: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-tertiary: #64748b;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #0f172a;
+            --background-secondary: #1e293b;
+            --background-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e0;
+            --text-tertiary: #94a3b8;
+            --border: #334155;
+            --border-light: #475569;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-light);
+            padding: 0.75rem 0;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] .header {
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--background-secondary);
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            font-size: 1.125rem;
+        }
+
+        .theme-toggle:hover {
+            background: var(--background-tertiary);
+            transform: scale(1.05);
+        }
+
+        .refresh-btn {
+            padding: 0.5rem 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+        }
+
+        .refresh-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        /* Main Content */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .status-card {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--background-secondary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-text {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .status-updates {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+            margin-top: 1rem;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: var(--background-secondary);
+            padding: 0.5rem;
+            border-radius: 16px;
+            margin-bottom: 3rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .filter-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            font-size: 0.875rem;
+            position: relative;
+        }
+
+        .tab-button.active {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .tab-button:not(.active):hover {
+            background: var(--background-tertiary);
+            color: var(--text-primary);
+        }
+
+        /* Summary Card */
+        .summary-card {
+            background: var(--gradient-1);
+            color: white;
+            padding: 2rem;
+            border-radius: 24px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(30px, -30px);
+        }
+
+        .summary-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .summary-content {
+            font-size: 1.125rem;
+            line-height: 1.7;
+            opacity: 0.95;
+        }
+
+        /* Top Stories */
+        .top-stories {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .top-stories-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .top-story {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--background-secondary);
+            padding: 1rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .top-story:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .story-rank {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-3);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        .story-content {
+            flex: 1;
+        }
+
+        .story-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .story-source {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+
+        .story-score {
+            font-size: 0.875rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Content Grid */
+        .content-section {
+            margin-bottom: 3rem;
+        }
+
+        .content-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        /* Content Cards */
+        .content-card {
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
+        }
+
+        .content-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .content-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .content-rank {
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            color: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .content-type {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        .content-type.blog {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+        }
+
+        .content-type.audio {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+        }
+
+        .content-type.video {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .significance-score {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+            font-weight: 600;
+        }
+
+        .score-bar {
+            width: 40px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            background: var(--gradient-3);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+
+        .content-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .content-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .content-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .action-button {
+            padding: 0.5rem 1.25rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .action-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .impact-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .impact-high {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .impact-medium {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+        }
+
+        .impact-low {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+        }
+
+        /* Loading States */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .loading-subtext {
+            color: var(--text-secondary);
+        }
+
+        /* Error States */
+        .error-container {
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            color: var(--error);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main {
+                padding: 1.5rem 1rem;
+            }
+
+            generateSourceUrl(source, title) {
+                // Generate intelligent source URLs based on the source name
+                const sourceMap = {
+                    'OpenAI': 'https://openai.com/blog',
+                    'DeepMind': 'https://deepmind.google/discover/blog',
+                    'Google': 'https://blog.google/technology/ai',
+                    'Microsoft': 'https://azure.microsoft.com/en-us/blog',
+                    'Meta': 'https://ai.meta.com/blog',
+                    'Anthropic': 'https://www.anthropic.com/news',
+                    'NVIDIA': 'https://blogs.nvidia.com/blog/category/artificial-intelligence',
+                    'Amazon': 'https://aws.amazon.com/blogs/machine-learning',
+                    'Apple': 'https://machinelearning.apple.com',
+                    'Tesla': 'https://www.tesla.com/blog',
+                    'Hugging Face': 'https://huggingface.co/blog',
+                    'Stability AI': 'https://stability.ai/blog',
+                    'Midjourney': 'https://docs.midjourney.com/blog',
+                    'Cohere': 'https://cohere.com/blog',
+                    'IBM': 'https://research.ibm.com/blog/ai',
+                    'Intel': 'https://www.intel.com/content/www/us/en/artificial-intelligence/posts.html'
+                };
+
+                // Try to find exact match first
+                if (sourceMap[source]) {
+                    return sourceMap[source];
+                }
+
+                // Try to find partial match (case insensitive)
+                const sourceKey = Object.keys(sourceMap).find(key => 
+                    key.toLowerCase().includes(source.toLowerCase()) || 
+                    source.toLowerCase().includes(key.toLowerCase())
+                );
+                
+                if (sourceKey) {
+                    return sourceMap[sourceKey];
+                }
+
+                // If no match found, create a Google search URL for the specific article
+                const searchQuery = encodeURIComponent(`${source} ${title}`);
+                return `https://www.google.com/search?q=${searchQuery}`;
+            }
+
+            formatSummaryAsPoints(summary) {
+                // If summary already has keyPoints array (structured format)
+                if (summary && summary.keyPoints && Array.isArray(summary.keyPoints)) {
+                    return summary.keyPoints.map(point => 
+                        `<div style="margin-bottom: 0.5rem; line-height: 1.5;">${point}</div>`
+                    ).join('');
+                }
+                
+                // If summary is a string (from actual API), convert to bullet points
+                if (typeof summary === 'string') {
+                    // Split by sentences and convert to bullet points
+                    const sentences = summary.split(/[.!?]+/).filter(s => s.trim().length > 0);
+                    return sentences.map(sentence => {
+                        const trimmed = sentence.trim();
+                        if (trimmed) {
+                            // Add bullet point if not already present
+                            const bulletPoint = trimmed.startsWith('•') ? trimmed : `• ${trimmed}`;
+                            return `<div style="margin-bottom: 0.5rem; line-height: 1.5;">${bulletPoint}</div>`;
+                        }
+                        return '';
+                    }).join('');
+                }
+                
+                // Fallback for any other format
+                return `<div style="margin-bottom: 0.5rem; line-height: 1.5;">• No summary available</div>`;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .summary-card {
+                padding: 1.5rem;
+            }
+
+            .content-card {
+                padding: 1.25rem;
+            }
+
+            .content-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .content-meta {
+                order: 2;
+            }
+
+            .content-footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .status-updates {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .filter-tabs {
+                gap: 0.25rem;
+                padding: 0.25rem;
+            }
+
+            .tab-button {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .content-grid {
+                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            }
+
+            .top-stories-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--background-secondary);
+            border-top: 1px solid var(--border);
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .legal-links {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .legal-links a {
+            color: var(--text-tertiary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .legal-links a:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .legal-links {
+                justify-content: center;
+            }
+        }
+
+        /* Dark mode transitions */
+        * {
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">🤖</div>
+                <span>AI Daily</span>
+            </a>
+            <div class="header-actions">
+                <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+                <button class="refresh-btn" onclick="aiDigest.forceRefresh()">
+                    <span>🔄</span>
+                    <span>Refresh</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 class="hero-title">AI Daily Digest</h1>
+            <p class="hero-subtitle">Stay ahead with intelligent AI news curation and summaries</p>
+            
+            <div class="status-card">
+                <div class="status-indicator"></div>
+                <span class="status-text">Live • Updated twice daily</span>
+            </div>
+            
+            <div class="status-updates">
+                <span>Last Updated: <span id="lastUpdated">--</span></span>
+                <span>Next Update: <span id="nextUpdate">--</span></span>
+            </div>
+        </section>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="tab-button active" data-type="all">🌟 All Updates</button>
+            <button class="tab-button" data-type="blog">📄 Articles</button>
+            <button class="tab-button" data-type="audio">🎧 Audio</button>
+            <button class="tab-button" data-type="video">🎥 Videos</button>
+        </div>
+
+        <!-- Content Container -->
+        <div id="digestContainer">
+            <!-- Content will be populated by JavaScript -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>AI Daily</h3>
+                    <div class="footer-links">
+                        <a href="#about">About Us</a>
+                        <a href="#methodology">Our Methodology</a>
+                        <a href="#api">API Access</a>
+                        <a href="#contact">Contact</a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <div class="footer-links">
+                        <a href="#archive">News Archive</a>
+                        <a href="#newsletter">Newsletter</a>
+                        <a href="#rss">RSS Feed</a>
+                        <a href="#mobile">Mobile App</a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Community</h3>
+                    <div class="footer-links">
+                        <a href="#discord">Discord</a>
+                        <a href="#twitter">Twitter</a>
+                        <a href="#linkedin">LinkedIn</a>
+                        <a href="#github">GitHub</a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <div class="footer-links">
+                        <a href="#help">Help Center</a>
+                        <a href="#feedback">Feedback</a>
+                        <a href="#bug-report">Report Issue</a>
+                        <a href="#feature-request">Feature Request</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-logo">
+                    <span>🤖</span>
+                    <span>© 2025 AI Daily • vidyagam.com</span>
+                </div>
+                <div class="legal-links">
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#terms">Terms of Service</a>
+                    <a href="#cookies">Cookie Policy</a>
+                    <a href="#disclaimer">Disclaimer</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.querySelector('.theme-toggle');
+            
+            if (body.dataset.theme === 'dark') {
+                body.dataset.theme = '';
+                themeToggle.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.dataset.theme = 'dark';
+                themeToggle.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Initialize theme
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeToggle = document.querySelector('.theme-toggle');
+            
+            if (savedTheme === 'dark') {
+                document.body.dataset.theme = 'dark';
+                themeToggle.textContent = '☀️';
+            }
+        }
+
+        // Your existing AIDigestApp class with updated render methods
+        class AIDigestApp {
+            constructor() {
+                this.currentFilter = 'all';
+                this.digestData = [];
+                this.lastUpdateTime = null;
+                this.apiBaseUrl = '/api';
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.updateTimestamps();
+                this.loadDigest();
+                
+                setInterval(() => this.updateTimestamps(), 60000);
+                setInterval(() => this.loadDigest(), 1800000);
+            }
+
+            setupEventListeners() {
+                document.querySelectorAll('.tab-button').forEach(button => {
+                    button.addEventListener('click', () => {
+                        this.switchTab(button.dataset.type);
+                    });
+                });
+            }
+
+            switchTab(type) {
+                this.currentFilter = type;
+                
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.type === type);
+                });
+                
+                this.renderDigest();
+            }
+
+            updateTimestamps() {
+                const now = new Date();
+                const et = new Date(now.toLocaleString("en-US", {timeZone: "America/New_York"}));
+                
+                if (this.lastUpdateTime) {
+                    document.getElementById('lastUpdated').textContent = 
+                        this.lastUpdateTime.toLocaleString('en-US', {
+                            timeZone: 'America/New_York',
+                            month: 'short',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: '2-digit'
+                        }) + ' ET';
+                }
+                
+                const morningUpdate = new Date(et);
+                morningUpdate.setHours(8, 0, 0, 0);
+                
+                const eveningUpdate = new Date(et);
+                eveningUpdate.setHours(18, 0, 0, 0);
+                
+                let nextUpdate;
+                if (et < morningUpdate) {
+                    nextUpdate = morningUpdate;
+                } else if (et < eveningUpdate) {
+                    nextUpdate = eveningUpdate;
+                } else {
+                    nextUpdate = new Date(morningUpdate);
+                    nextUpdate.setDate(nextUpdate.getDate() + 1);
+                }
+
+                document.getElementById('nextUpdate').textContent = 
+                    nextUpdate.toLocaleString('en-US', {
+                        timeZone: 'America/New_York',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true,
+                        weekday: 'short'
+                    }) + ' ET';
+            }
+
+            async loadDigest() {
+                try {
+                    this.showLoadingState();
+                    const data = await this.fetchAINews();
+                    this.digestData = data;
+                    this.lastUpdateTime = new Date(data.timestamp);
+                    this.renderDigest();
+                    this.updateTimestamps();
+                } catch (error) {
+                    console.error('Error loading digest:', error);
+                    this.showErrorState(error);
+                }
+            }
+
+            async fetchAINews() {
+                try {
+                    const response = await fetch(`${this.apiBaseUrl}/digest`, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return await response.json();
+                } catch (error) {
+                    console.error('API fetch error:', error);
+                    return this.getMockData();
+                }
+            }
+
+            getMockData() {
+                const now = new Date();
+                const timeOfDay = now.getHours() < 14 ? 'Morning' : 'Evening';
+                
+                return {
+                    summary: {
+                        keyPoints: [
+                            "• OpenAI released GPT-4.5 with 40% improved reasoning capabilities",
+                            "• Google DeepMind announced breakthrough in protein folding accuracy",
+                            "• Microsoft Azure AI expanded to 15 new regions globally",
+                            "• Meta's Code Llama 2 achieved 85% accuracy on coding benchmarks",
+                            "• Anthropic published safety research on constitutional AI methods",
+                            "• NVIDIA unveiled new H200 chips for enterprise AI workloads",
+                            "• Amazon's Alexa integration with generative AI reached public beta"
+                        ],
+                        metrics: {
+                            totalUpdates: 47,
+                            highImpact: 8,
+                            newResearch: 12,
+                            industryMoves: 15
+                        }
+                    },
+                    content: {
+                        blog: [
+                            {
+                                title: "OpenAI Unveils GPT-4.5 with Enhanced Reasoning",
+                                description: "The latest iteration shows remarkable improvements in logical reasoning, mathematical problem-solving, and reduced hallucinations. Early benchmarks suggest a 40% improvement over GPT-4.",
+                                source: "OpenAI",
+                                time: "2 hours ago",
+                                impact: "high",
+                                type: "blog",
+                                url: "https://openai.com/blog",
+                                readTime: "5 min read",
+                                significanceScore: 9.2
+                            }
+                        ],
+                        audio: [
+                            {
+                                title: "AI Weekly: Industry Roundup",
+                                description: "Expert analysis of this week's most significant AI developments.",
+                                source: "AI Weekly Podcast",
+                                time: "4 hours ago",
+                                impact: "medium",
+                                type: "audio",
+                                url: "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5zaW1wbGVjYXN0LmNvbS84NFJQemZRNQ",
+                                duration: "32 min",
+                                significanceScore: 6.5
+                            }
+                        ],
+                        video: [
+                            {
+                                title: "AI Breakthrough Demonstrations",
+                                description: "Latest AI model capabilities showcased through real-world applications.",
+                                source: "AI Demos Channel",
+                                time: "2 hours ago",
+                                impact: "high",
+                                type: "video",
+                                url: "https://www.youtube.com/watch?v=demo",
+                                duration: "15 min",
+                                significanceScore: 7.8
+                            }
+                        ]
+                    },
+                    topStories: [
+                        {
+                            title: "OpenAI Unveils GPT-4.5 with Enhanced Reasoning",
+                            source: "OpenAI",
+                            significanceScore: 9.2,
+                            url: "https://openai.com/blog"
+                        },
+                        {
+                            title: "Google DeepMind Protein Folding Breakthrough",
+                            source: "DeepMind",
+                            significanceScore: 8.7,
+                            url: "https://deepmind.google/discover/blog"
+                        },
+                        {
+                            title: "Microsoft Azure AI Global Expansion",
+                            source: "Microsoft",
+                            significanceScore: 7.3,
+                            url: "https://azure.microsoft.com/en-us/blog"
+                        }
+                    ],
+                    timestamp: now.toISOString(),
+                    badge: `${timeOfDay} Digest`
+                };
+            }
+
+            async forceRefresh() {
+                try {
+                    this.showLoadingState();
+                    
+                    const response = await fetch(`${this.apiBaseUrl}/digest?refresh=1`, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+                    const data = await response.json();
+                    this.digestData = data;
+                    this.lastUpdateTime = new Date(data.timestamp);
+                    this.renderDigest();
+                    this.updateTimestamps();
+                    
+                } catch (error) {
+                    console.error('Error refreshing digest:', error);
+                    this.showErrorState(error);
+                }
+            }
+
+            getFilteredContent() {
+                if (!this.digestData.content) return [];
+                
+                if (this.currentFilter === 'all') {
+                    return [
+                        ...this.digestData.content.blog || [],
+                        ...this.digestData.content.audio || [],
+                        ...this.digestData.content.video || []
+                    ].sort((a, b) => (b.significanceScore || 0) - (a.significanceScore || 0));
+                }
+                
+                return this.digestData.content[this.currentFilter] || [];
+            }
+
+            renderDigest() {
+                const container = document.getElementById('digestContainer');
+                
+                if (!this.digestData || !this.digestData.content) {
+                    container.innerHTML = '<div class="error-container">No data available</div>';
+                    return;
+                }
+
+                const filteredContent = this.getFilteredContent();
+
+                let html = '';
+
+                // Show summary and top stories only for 'all' filter
+                if (this.currentFilter === 'all') {
+                    // Summary section
+                    html += `
+                        <div class="summary-card">
+                            <div class="summary-title">
+                                <span>📊</span>
+                                <span>Today's AI Industry Summary</span>
+                            </div>
+                            <div class="summary-content">
+                                <div style="margin-bottom: 1.5rem;">
+                                    <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; opacity: 0.9;">Key Developments:</h4>
+                                    ${this.formatSummaryAsPoints(this.digestData.summary)}
+                                </div>
+                                ${this.digestData.summary && this.digestData.summary.metrics ? `
+                                    <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2);">
+                                        <div style="text-align: center;">
+                                            <div style="font-size: 1.5rem; font-weight: 700;">${this.digestData.summary.metrics.totalUpdates}</div>
+                                            <div style="font-size: 0.875rem; opacity: 0.8;">Total Updates</div>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <div style="font-size: 1.5rem; font-weight: 700;">${this.digestData.summary.metrics.highImpact}</div>
+                                            <div style="font-size: 0.875rem; opacity: 0.8;">High Impact</div>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <div style="font-size: 1.5rem; font-weight: 700;">${this.digestData.summary.metrics.newResearch}</div>
+                                            <div style="font-size: 0.875rem; opacity: 0.8;">New Research</div>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <div style="font-size: 1.5rem; font-weight: 700;">${this.digestData.summary.metrics.industryMoves}</div>
+                                            <div style="font-size: 0.875rem; opacity: 0.8;">Industry Moves</div>
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+
+                    // Top stories section
+                    if (this.digestData.topStories && this.digestData.topStories.length > 0) {
+                        html += `
+                            <div class="top-stories">
+                                <h2 class="section-title">🌟 Most Significant Developments</h2>
+                                <div class="top-stories-grid">
+                                    ${this.digestData.topStories.slice(0, 3).map((story, index) => {
+                                        // Use the actual source URL from the API response, or fallback to a search
+                                        const storyUrl = story.url || story.sourceUrl || story.link || this.generateSourceUrl(story.source, story.title);
+                                        return `
+                                            <a href="${storyUrl}" target="_blank" rel="noopener noreferrer" class="top-story">
+                                                <div class="story-rank">${index + 1}</div>
+                                                <div class="story-content">
+                                                    <div class="story-title">${story.title}</div>
+                                                    <div class="story-source">${story.source}</div>
+                                                </div>
+                                                <div class="story-score">${story.significanceScore}/10</div>
+                                            </a>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+
+                // Content section
+                html += `
+                    <div class="content-section">
+                        <h2 class="section-title">${this.getSectionTitle()}</h2>
+                        <div class="content-grid">
+                            ${filteredContent.length > 0 
+                                ? filteredContent.map((item, index) => this.renderContentCard(item, index)).join('')
+                                : '<div class="error-container">No content available for this category.</div>'
+                            }
+                        </div>
+                    </div>
+                `;
+
+                container.innerHTML = html;
+            }
+
+            getSectionTitle() {
+                const titles = {
+                    'all': 'Latest AI Updates',
+                    'blog': 'Featured Articles & Research',
+                    'audio': 'Podcasts & Audio Content',
+                    'video': 'Videos & Demonstrations'
+                };
+                return titles[this.currentFilter] || 'AI Updates';
+            }
+
+            renderContentCard(item, index) {
+                const typeIcons = {
+                    blog: '📄',
+                    audio: '🎧',
+                    video: '🎥'
+                };
+
+                const significanceScore = item.significanceScore || 5;
+                const rankPosition = index + 1;
+                const isExternalLink = item.url && item.url !== '#';
+
+                return `
+                    <div class="content-card">
+                        <div class="content-header">
+                            <div class="content-meta">
+                                <div class="content-rank">${rankPosition}</div>
+                                <div class="content-type ${item.type}">
+                                    ${typeIcons[item.type]} ${item.type.toUpperCase()}
+                                </div>
+                            </div>
+                            <div class="significance-score">
+                                <div class="score-bar">
+                                    <div class="score-fill" style="width: ${(significanceScore / 10) * 100}%"></div>
+                                </div>
+                                <span>${significanceScore}/10</span>
+                            </div>
+                        </div>
+
+                        <h3 class="content-title">${item.title}</h3>
+                        <p class="content-description">${item.description}</p>
+
+                        <div class="content-footer">
+                            <div class="content-info">
+                                <div class="info-item">
+                                    <span>📍</span>
+                                    <span>${item.source}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span>🕒</span>
+                                    <span>${item.time}</span>
+                                </div>
+                                ${item.duration ? `
+                                    <div class="info-item">
+                                        <span>⏱️</span>
+                                        <span>${item.duration}</span>
+                                    </div>
+                                ` : ''}
+                                ${item.readTime ? `
+                                    <div class="info-item">
+                                        <span>📖</span>
+                                        <span>${item.readTime}</span>
+                                    </div>
+                                ` : ''}
+                                <div class="impact-badge impact-${item.impact}">
+                                    ${item.impact} impact
+                                </div>
+                            </div>
+                            
+                            ${isExternalLink ? 
+                                `<a href="${item.url}" class="action-button" target="_blank" rel="noopener noreferrer">
+                                    ${item.type === 'blog' ? 'Read Article' : item.type === 'audio' ? 'Listen Now' : 'Watch Video'}
+                                    <span>→</span>
+                                </a>` :
+                                `<button class="action-button" onclick="showComingSoon()">
+                                    ${item.type === 'blog' ? 'Read Article' : item.type === 'audio' ? 'Listen Now' : 'Watch Video'}
+                                    <span>→</span>
+                                </button>`
+                            }
+                        </div>
+                    </div>
+                `;
+            }
+
+            showLoadingState() {
+                document.getElementById('digestContainer').innerHTML = `
+                    <div class="loading-container">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-text">Curating AI developments...</div>
+                        <div class="loading-subtext">Analyzing content with Claude AI</div>
+                    </div>
+                `;
+            }
+
+            showErrorState(error) {
+                document.getElementById('digestContainer').innerHTML = `
+                    <div class="error-container">
+                        <h3>Unable to load AI digest</h3>
+                        <p>There was an issue connecting to our content service.</p>
+                        <p style="margin-top: 1rem; font-size: 0.875rem; opacity: 0.8;">
+                            ${error.message || 'Please try refreshing the page.'}
+                        </p>
+                        <button class="action-button" onclick="aiDigest.forceRefresh()" style="margin-top: 1.5rem;">
+                            <span>🔄</span>
+                            <span>Try Again</span>
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Coming soon notification
+        function showComingSoon() {
+            // Create modern notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 16px;
+                z-index: 10000;
+                font-weight: 600;
+                font-size: 0.875rem;
+                box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+                backdrop-filter: blur(12px);
+                animation: slideInRight 0.3s ease;
+                max-width: 300px;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    <span>🚀</span>
+                    <strong>Coming Soon!</strong>
+                </div>
+                <div style="opacity: 0.9; font-weight: 400; line-height: 1.4;">
+                    We're working on real-time content aggregation for this category.
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Add slide-in animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideInRight {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOutRight {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Remove after 4 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                    if (document.head.contains(style)) {
+                        document.head.removeChild(style);
+                    }
+                }, 300);
+            }, 4000);
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            window.aiDigest = new AIDigestApp();
+        });
+
+        // Add smooth scrolling for better UX
+        document.documentElement.style.scrollBehavior = 'smooth';
+    </script>
+    </script>
+</body>
+</html>
