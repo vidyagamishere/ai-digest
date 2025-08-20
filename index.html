@@ -3,30 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Daily Digest - vidyagam.com</title>
-    <meta name="description" content="Stay updated with the latest AI industry developments - automated summaries twice daily with intelligent ranking">
-    <meta name="keywords" content="AI news, artificial intelligence, machine learning, OpenAI, Claude, tech digest">
-    <meta name="author" content="vidyagam.com">
+    <title>AI Daily • vidyagam.com</title>
+    <meta name="description" content="Stay updated with the latest AI developments - curated and summarized by AI">
     
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://vidyagam.com">
-    <meta property="og:title" content="AI Daily Digest">
-    <meta property="og:description" content="Automated AI industry updates with intelligent ranking">
-    <meta property="og:image" content="https://vidyagam.com/og-image.png">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://vidyagam.com">
-    <meta property="twitter:title" content="AI Daily Digest">
-    <meta property="twitter:description" content="Automated AI industry updates with intelligent ranking">
-    <meta property="twitter:image" content="https://vidyagam.com/og-image.png">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --accent: #06b6d4;
+            --background: #ffffff;
+            --background-secondary: #f8fafc;
+            --background-tertiary: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-tertiary: #64748b;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #0f172a;
+            --background-secondary: #1e293b;
+            --background-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e0;
+            --text-tertiary: #94a3b8;
+            --border: #334155;
+            --border-light: #475569;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -34,579 +56,525 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-            min-height: 100vh;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
         }
 
-        .container {
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-light);
+            padding: 0.75rem 0;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] .header {
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .header-content {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            color: white;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .logo {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #06b6d4, #3b82f6, #8b5cf6);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: none;
-        }
-
-        .tagline {
-            font-size: 1.1rem;
-            opacity: 0.8;
-            margin-bottom: 20px;
-            color: #94a3b8;
-        }
-
-        .status-bar {
-            background: rgba(15, 23, 42, 0.8);
-            padding: 20px;
-            border-radius: 20px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            margin-bottom: 30px;
-        }
-
-        .status-grid {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
+            display: flex;
             align-items: center;
-            gap: 20px;
-            text-align: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            text-decoration: none;
         }
 
-        .update-info {
-            color: #e2e8f0;
-        }
-
-        .last-updated {
-            font-size: 0.9rem;
-            color: #94a3b8;
-        }
-
-        .next-update {
-            font-weight: 600;
-            color: #06b6d4;
-        }
-
-        .live-indicator {
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-1);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            font-weight: 600;
-            color: #10b981;
+            font-size: 1.125rem;
         }
 
-        .live-dot {
-            width: 12px;
-            height: 12px;
-            background: #10b981;
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--background-secondary);
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            font-size: 1.125rem;
+        }
+
+        .theme-toggle:hover {
+            background: var(--background-tertiary);
+            transform: scale(1.05);
+        }
+
+        .refresh-btn {
+            padding: 0.5rem 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+        }
+
+        .refresh-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        /* Main Content */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .status-card {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--background-secondary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.2); }
-            100% { opacity: 1; transform: scale(1); }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
-        .auto-refresh {
-            text-align: right;
-            font-size: 0.85rem;
-            color: #64748b;
+        .status-text {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
         }
 
-        .content-type-tabs {
+        .status-updates {
             display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            background: rgba(15, 23, 42, 0.8);
-            padding: 8px;
+            justify-content: center;
+            gap: 2rem;
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+            margin-top: 1rem;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: var(--background-secondary);
+            padding: 0.5rem;
             border-radius: 16px;
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            margin-bottom: 3rem;
             overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .filter-tabs::-webkit-scrollbar {
+            display: none;
         }
 
         .tab-button {
-            background: transparent;
+            padding: 0.75rem 1.5rem;
             border: none;
-            color: #94a3b8;
-            padding: 12px 20px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 600;
             border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            transition: all 0.2s ease;
             white-space: nowrap;
-            min-width: max-content;
+            font-size: 0.875rem;
+            position: relative;
         }
 
         .tab-button.active {
-            background: linear-gradient(45deg, #06b6d4, #3b82f6);
+            background: var(--primary);
             color: white;
             transform: translateY(-1px);
         }
 
-        .tab-button:hover:not(.active) {
-            background: rgba(59, 130, 246, 0.1);
-            color: #e2e8f0;
+        .tab-button:not(.active):hover {
+            background: var(--background-tertiary);
+            color: var(--text-primary);
         }
 
-        .digest-container {
-            display: grid;
-            gap: 30px;
-        }
-
-        .digest-card {
-            background: rgba(15, 23, 42, 0.95);
-            border-radius: 24px;
-            padding: 30px;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            backdrop-filter: blur(20px);
-            transition: all 0.3s ease;
-        }
-
-        .digest-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(59, 130, 246, 0.4);
-            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.1);
-        }
-
-        .digest-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .digest-badge {
-            background: linear-gradient(45deg, #06b6d4, #3b82f6);
+        /* Summary Card */
+        .summary-card {
+            background: var(--gradient-1);
             color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 0.9rem;
+            padding: 2rem;
+            border-radius: 24px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(30px, -30px);
+        }
+
+        .summary-title {
+            font-size: 1.25rem;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
         }
 
-        .digest-time {
-            color: #94a3b8;
-            font-weight: 500;
-            font-size: 0.95rem;
+        .summary-content {
+            font-size: 1.125rem;
+            line-height: 1.7;
+            opacity: 0.95;
         }
 
-        .top-stories-section {
-            margin-bottom: 30px;
-            padding: 25px;
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 16px;
-            border-left: 4px solid #3b82f6;
+        /* Top Stories */
+        .top-stories {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
         }
 
         .top-stories-grid {
             display: grid;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 1rem;
         }
 
-        .top-story-card {
+        .top-story {
             display: flex;
             align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: rgba(15, 23, 42, 0.6);
-            border-radius: 12px;
-            transition: all 0.3s ease;
+            gap: 1rem;
+            background: var(--background-secondary);
+            padding: 1rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
         }
 
-        .top-story-card:hover {
-            background: rgba(15, 23, 42, 0.8);
-            transform: translateX(5px);
+        .top-story:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
         }
 
         .story-rank {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #3b82f6;
-            min-width: 40px;
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-3);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
         }
-
-        .rank-1 .story-rank { color: #ffd700; }
-        .rank-2 .story-rank { color: #c0c0c0; }
-        .rank-3 .story-rank { color: #cd7f32; }
 
         .story-content {
             flex: 1;
         }
 
         .story-title {
-            font-weight: 700;
-            color: #f1f5f9;
-            margin-bottom: 5px;
-            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
         }
 
         .story-source {
-            color: #94a3b8;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
         }
 
-        .significance-bar {
-            position: relative;
-            background: rgba(71, 85, 105, 0.4);
-            height: 6px;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .significance-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
-            transition: width 0.5s ease;
-        }
-
-        .significance-score {
-            position: absolute;
-            right: 0;
-            top: -25px;
-            font-size: 0.8rem;
-            color: #e2e8f0;
+        .story-score {
+            font-size: 0.875rem;
+            color: var(--primary);
             font-weight: 600;
         }
 
-        .summary-section {
-            margin-bottom: 30px;
+        /* Content Grid */
+        .content-section {
+            margin-bottom: 3rem;
         }
 
-        .summary-title {
-            color: #e2e8f0;
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .summary-text {
-            background: rgba(59, 130, 246, 0.1);
-            padding: 20px;
-            border-radius: 15px;
-            color: #cbd5e0;
-            font-size: 1.05rem;
-            line-height: 1.7;
-            border-left: 4px solid #3b82f6;
-        }
-
-        .content-section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
-        }
-
-        .ranking-badge {
-            background: rgba(59, 130, 246, 0.2);
-            color: #60a5fa;
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .news-items {
+        .content-grid {
             display: grid;
-            gap: 20px;
+            gap: 1.5rem;
         }
 
-        .news-item {
-            background: rgba(30, 41, 59, 0.6);
-            padding: 25px;
-            border-radius: 16px;
-            border: 1px solid rgba(71, 85, 105, 0.3);
+        /* Content Cards */
+        .content-card {
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+        }
+
+        .content-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
+        }
+
+        .content-header {
             display: flex;
-            gap: 20px;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            gap: 1rem;
         }
 
-        .news-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(to bottom, #06b6d4, #3b82f6, #8b5cf6);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .news-item:hover {
-            background: rgba(30, 41, 59, 0.8);
-            border-color: rgba(59, 130, 246, 0.4);
-            transform: translateX(5px);
-        }
-
-        .news-item:hover::before {
-            opacity: 1;
-        }
-
-        .news-ranking {
+        .content-meta {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 10px;
-            min-width: 60px;
+            gap: 0.75rem;
+            flex-shrink: 0;
         }
 
-        .rank-badge {
-            background: linear-gradient(45deg, #06b6d4, #3b82f6);
+        .content-rank {
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
             color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 0.9rem;
+            font-weight: 600;
+            font-size: 0.75rem;
         }
 
-        .significance-indicator {
+        .content-type {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        .content-type.blog {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+        }
+
+        .content-type.audio {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+        }
+
+        .content-type.video {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .significance-score {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+            font-weight: 600;
         }
 
-        .significance-meter {
-            width: 4px;
-            height: 40px;
-            background: rgba(71, 85, 105, 0.4);
+        .score-bar {
+            width: 40px;
+            height: 4px;
+            background: var(--border);
             border-radius: 2px;
             overflow: hidden;
         }
 
-        .meter-fill {
-            width: 100%;
-            background: linear-gradient(to top, #10b981, #3b82f6, #8b5cf6);
-            transition: height 0.5s ease;
+        .score-fill {
+            height: 100%;
+            background: var(--gradient-3);
+            border-radius: 2px;
+            transition: width 0.5s ease;
         }
 
-        .significance-label {
-            font-size: 0.7rem;
-            color: #94a3b8;
-            font-weight: 600;
-        }
-
-        .news-main-content {
-            flex: 1;
-        }
-
-        .news-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-            gap: 15px;
-        }
-
-        .news-title {
-            color: #f1f5f9;
+        .content-title {
+            font-size: 1.25rem;
             font-weight: 700;
-            font-size: 1.15rem;
             line-height: 1.4;
-            flex: 1;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
         }
 
-        .content-type-badge {
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
-
-        .content-blog {
-            background: rgba(34, 197, 94, 0.2);
-            color: #86efac;
-        }
-
-        .content-audio {
-            background: rgba(245, 158, 11, 0.2);
-            color: #fcd34d;
-        }
-
-        .content-video {
-            background: rgba(239, 68, 68, 0.2);
-            color: #fca5a5;
-        }
-
-        .news-description {
-            color: #94a3b8;
-            font-size: 1rem;
+        .content-description {
+            color: var(--text-secondary);
             line-height: 1.6;
-            margin-bottom: 15px;
+            margin-bottom: 1.5rem;
         }
 
-        .media-preview {
-            margin-top: 15px;
-            padding: 15px;
-            background: rgba(15, 23, 42, 0.6);
-            border-radius: 12px;
-            border-left: 4px solid;
-        }
-
-        .media-preview.blog {
-            border-left-color: #22c55e;
-        }
-
-        .media-preview.audio {
-            border-left-color: #f59e0b;
-        }
-
-        .media-preview.video {
-            border-left-color: #ef4444;
-        }
-
-        .media-meta {
+        .content-footer {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 10px;
+            justify-content: space-between;
             flex-wrap: wrap;
+            gap: 1rem;
         }
 
-        .news-source {
-            background: rgba(59, 130, 246, 0.2);
-            color: #60a5fa;
-            padding: 4px 12px;
+        .content-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .action-button {
+            padding: 0.5rem 1.25rem;
+            background: var(--primary);
+            color: white;
+            border: none;
             border-radius: 12px;
-            font-size: 0.8rem;
             font-weight: 600;
-        }
-
-        .duration-badge {
-            background: rgba(71, 85, 105, 0.4);
-            color: #cbd5e0;
-            padding: 3px 8px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        .view-link {
-            color: #06b6d4;
+            cursor: pointer;
+            transition: all 0.2s ease;
             text-decoration: none;
-            font-weight: 600;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            margin-top: 10px;
-            transition: all 0.3s ease;
+            gap: 0.5rem;
+            font-size: 0.875rem;
         }
 
-        .view-link:hover {
-            color: #3b82f6;
-            transform: translateX(3px);
-        }
-
-        .news-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #64748b;
-            font-size: 0.85rem;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .news-time {
-            display: flex;
-            align-items: center;
-            gap: 5px;
+        .action-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
         }
 
         .impact-badge {
-            padding: 4px 10px;
-            border-radius: 10px;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
         }
 
         .impact-high {
-            background: rgba(239, 68, 68, 0.2);
-            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
         }
 
         .impact-medium {
-            background: rgba(245, 158, 11, 0.2);
-            color: #fcd34d;
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
         }
 
         .impact-low {
-            background: rgba(34, 197, 94, 0.2);
-            color: #86efac;
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
         }
 
-        .trending-badge {
-            background: rgba(239, 68, 68, 0.2);
-            color: #fca5a5;
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
-
+        /* Loading States */
         .loading-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 60px 20px;
-            color: #94a3b8;
+            padding: 4rem 2rem;
+            text-align: center;
         }
 
         .loading-spinner {
             width: 40px;
             height: 40px;
-            border: 3px solid rgba(59, 130, 246, 0.3);
-            border-top: 3px solid #3b82f6;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
 
         @keyframes spin {
@@ -615,190 +583,171 @@
         }
 
         .loading-text {
-            text-align: center;
-        }
-
-        .sub-text {
-            font-size: 0.9rem;
-            opacity: 0.7;
-            margin-top: 10px;
-        }
-
-        .progress-bar {
-            width: 200px;
-            height: 4px;
-            background: rgba(59, 130, 246, 0.3);
-            border-radius: 2px;
-            margin: 15px auto;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #06b6d4, #3b82f6);
-            animation: progress 2s ease-in-out infinite;
-        }
-
-        @keyframes progress {
-            0% { width: 0%; }
-            50% { width: 70%; }
-            100% { width: 100%; }
-        }
-
-        .error-container {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 16px;
-            padding: 30px;
-            text-align: center;
-            color: #fca5a5;
-        }
-
-        .refresh-btn {
-            background: linear-gradient(45deg, #06b6d4, #3b82f6);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
+            font-size: 1.125rem;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-            font-size: 0.95rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
         }
 
-        .refresh-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        .loading-subtext {
+            color: var(--text-secondary);
         }
 
-        .floating-refresh {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 1000;
-            background: linear-gradient(45deg, #06b6d4, #3b82f6);
-            color: white;
-            border: none;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
+        /* Error States */
+        .error-container {
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            color: var(--error);
         }
 
-        .floating-refresh:hover {
-            transform: scale(1.1);
-            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
-        }
-
-        /* Mobile-first responsive design */
-        @media (max-width: 767px) {
-            .status-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main {
+                padding: 1.5rem 1rem;
             }
-            
-            .digest-header {
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .summary-card {
+                padding: 1.5rem;
+            }
+
+            .content-card {
+                padding: 1.25rem;
+            }
+
+            .content-header {
                 flex-direction: column;
                 align-items: flex-start;
+                gap: 0.75rem;
             }
-            
-            .news-item {
-                flex-direction: column;
-                gap: 15px;
+
+            .content-meta {
+                order: 2;
             }
-            
-            .news-ranking {
-                flex-direction: row;
-                align-items: center;
-                justify-content: flex-start;
-                min-width: auto;
-            }
-            
-            .significance-meter {
-                width: 40px;
-                height: 4px;
-            }
-            
-            .meter-fill {
-                height: 100%;
-            }
-            
-            .news-header {
+
+            .content-footer {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 10px;
+                gap: 0.75rem;
             }
-            
-            .news-meta {
+
+            .status-updates {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
+                gap: 0.5rem;
+            }
+
+            .filter-tabs {
+                gap: 0.25rem;
+                padding: 0.25rem;
+            }
+
+            .tab-button {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
             }
         }
 
         @media (min-width: 768px) {
-            .container {
-                padding: 40px;
+            .content-grid {
+                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             }
-            
-            .logo {
-                font-size: 3.5rem;
+
+            .top-stories-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             }
-            
-            .digest-container {
-                max-width: 900px;
-                margin: 0 auto;
-            }
+        }
+
+        /* Dark mode transitions */
+        * {
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo">🤖 AI Daily Digest</div>
-            <div class="tagline">Automated summaries of the hottest AI industry developments</div>
-            <div class="status-bar">
-                <div class="status-grid">
-                    <div class="update-info">
-                        <div class="last-updated">Last Updated</div>
-                        <div id="lastUpdated">--</div>
-                    </div>
-                    <div class="live-indicator">
-                        <div class="live-dot"></div>
-                        <span>LIVE</span>
-                    </div>
-                    <div class="auto-refresh">
-                        <div>Next Update</div>
-                        <div class="next-update" id="nextUpdate">--</div>
-                    </div>
-                </div>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">🤖</div>
+                <span>AI Daily</span>
+            </a>
+            <div class="header-actions">
+                <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+                <button class="refresh-btn" onclick="aiDigest.forceRefresh()">
+                    <span>🔄</span>
+                    <span>Refresh</span>
+                </button>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <main>
-            <div class="content-type-tabs">
-                <button class="tab-button active" data-type="all">🌟 All Updates</button>
-                <button class="tab-button" data-type="blog">📝 Blog Posts</button>
-                <button class="tab-button" data-type="audio">🎧 Podcasts & Audio</button>
-                <button class="tab-button" data-type="video">🎥 Videos & Demos</button>
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 class="hero-title">AI Daily Digest</h1>
+            <p class="hero-subtitle">Stay ahead with intelligent AI news curation and summaries</p>
+            
+            <div class="status-card">
+                <div class="status-indicator"></div>
+                <span class="status-text">Live • Updated twice daily</span>
             </div>
             
-            <div class="digest-container" id="digestContainer">
-                <!-- Content will be populated here -->
+            <div class="status-updates">
+                <span>Last Updated: <span id="lastUpdated">--</span></span>
+                <span>Next Update: <span id="nextUpdate">--</span></span>
             </div>
-        </main>
-    </div>
+        </section>
 
-    <button class="floating-refresh" id="refreshBtn" onclick="aiDigest.forceRefresh()">🔄</button>
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="tab-button active" data-type="all">🌟 All Updates</button>
+            <button class="tab-button" data-type="blog">📝 Articles</button>
+            <button class="tab-button" data-type="audio">🎧 Audio</button>
+            <button class="tab-button" data-type="video">🎥 Videos</button>
+        </div>
+
+        <!-- Content Container -->
+        <div id="digestContainer">
+            <!-- Content will be populated by JavaScript -->
+        </div>
+    </main>
 
     <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.querySelector('.theme-toggle');
+            
+            if (body.dataset.theme === 'dark') {
+                body.dataset.theme = '';
+                themeToggle.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.dataset.theme = 'dark';
+                themeToggle.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Initialize theme
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeToggle = document.querySelector('.theme-toggle');
+            
+            if (savedTheme === 'dark') {
+                document.body.dataset.theme = 'dark';
+                themeToggle.textContent = '☀️';
+            }
+        }
+
+        // Your existing AIDigestApp class with updated render methods
         class AIDigestApp {
             constructor() {
                 this.currentFilter = 'all';
@@ -923,34 +872,12 @@
                                 url: "https://openai.com/blog",
                                 readTime: "5 min read",
                                 significanceScore: 9.2
-                            },
-                            {
-                                title: "Google's Gemini Ultra 2.0 Beta Launch",
-                                description: "Enhanced multimodal capabilities with better image understanding and real-time processing capabilities set new standards for AI applications.",
-                                source: "Google AI",
-                                time: "4 hours ago",
-                                impact: "high",
-                                type: "blog",
-                                url: "https://ai.googleblog.com",
-                                readTime: "7 min read",
-                                significanceScore: 8.7
-                            },
-                            {
-                                title: "Meta's AI Training Efficiency Breakthrough",
-                                description: "Research team achieves 90% reduction in training time for large language models using novel architecture optimizations.",
-                                source: "Meta AI",
-                                time: "6 hours ago",
-                                impact: "medium",
-                                type: "blog",
-                                url: "https://ai.facebook.com",
-                                readTime: "6 min read",
-                                significanceScore: 7.5
                             }
                         ],
                         audio: [
                             {
                                 title: "AI Weekly: Industry Roundup",
-                                description: "Expert analysis of this week's most significant AI developments and their industry implications.",
+                                description: "Expert analysis of this week's most significant AI developments.",
                                 source: "AI Weekly Podcast",
                                 time: "4 hours ago",
                                 impact: "medium",
@@ -963,7 +890,7 @@
                         video: [
                             {
                                 title: "AI Breakthrough Demonstrations",
-                                description: "Latest AI model capabilities showcased through real-world applications and use cases.",
+                                description: "Latest AI model capabilities showcased through real-world applications.",
                                 source: "AI Demos Channel",
                                 time: "2 hours ago",
                                 impact: "high",
@@ -979,16 +906,6 @@
                             title: "OpenAI Unveils GPT-4.5 with Enhanced Reasoning",
                             source: "OpenAI",
                             significanceScore: 9.2
-                        },
-                        {
-                            title: "Google's Gemini Ultra 2.0 Beta Launch", 
-                            source: "Google AI",
-                            significanceScore: 8.7
-                        },
-                        {
-                            title: "AI Breakthrough Demonstrations",
-                            source: "AI Demos Channel", 
-                            significanceScore: 7.8
                         }
                     ],
                     timestamp: now.toISOString(),
@@ -1013,37 +930,10 @@
                     this.renderDigest();
                     this.updateTimestamps();
                     
-                    this.showSuccessMessage('Content refreshed successfully!');
-                    
                 } catch (error) {
                     console.error('Error refreshing digest:', error);
                     this.showErrorState(error);
                 }
-            }
-
-            showSuccessMessage(message) {
-                const notification = document.createElement('div');
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: linear-gradient(45deg, #10b981, #059669);
-                    color: white;
-                    padding: 15px 25px;
-                    border-radius: 10px;
-                    z-index: 10000;
-                    font-weight: 600;
-                    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
-                    animation: slideIn 0.3s ease;
-                `;
-                notification.textContent = message;
-                
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    notification.style.animation = 'slideOut 0.3s ease';
-                    setTimeout(() => document.body.removeChild(notification), 300);
-                }, 3000);
             }
 
             getFilteredContent() {
@@ -1069,102 +959,73 @@
                 }
 
                 const filteredContent = this.getFilteredContent();
-                const contentCounts = {
-                    blog: this.digestData.content.blog?.length || 0,
-                    audio: this.digestData.content.audio?.length || 0,
-                    video: this.digestData.content.video?.length || 0
-                };
 
-                document.querySelector('[data-type="blog"]').innerHTML = `📝 Blog Posts (${contentCounts.blog})`;
-                document.querySelector('[data-type="audio"]').innerHTML = `🎧 Podcasts & Audio (${contentCounts.audio})`;
-                document.querySelector('[data-type="video"]').innerHTML = `🎥 Videos & Demos (${contentCounts.video})`;
+                let html = '';
 
-                container.innerHTML = `
-                    <div class="digest-card">
-                        <div class="digest-header">
-                            <div class="digest-badge">
-                                🔥 ${this.digestData.badge}
+                // Show summary and top stories only for 'all' filter
+                if (this.currentFilter === 'all') {
+                    // Summary section
+                    html += `
+                        <div class="summary-card">
+                            <div class="summary-title">
+                                <span>📊</span>
+                                <span>Today's AI Industry Summary</span>
                             </div>
-                            <div class="digest-time">${new Date(this.digestData.timestamp).toLocaleString('en-US', {
-                                timeZone: 'America/New_York',
-                                month: 'short',
-                                day: 'numeric',
-                                hour: 'numeric',
-                                minute: '2-digit'
-                            })} ET</div>
+                            <div class="summary-content">
+                                ${this.digestData.summary}
+                            </div>
                         </div>
+                    `;
 
-                        ${this.currentFilter === 'all' ? this.renderTopStoriesSection() : ''}
-                        ${this.currentFilter === 'all' ? this.renderSummarySection() : ''}
+                    // Top stories section
+                    if (this.digestData.topStories && this.digestData.topStories.length > 0) {
+                        html += `
+                            <div class="top-stories">
+                                <h2 class="section-title">🌟 Most Significant Developments</h2>
+                                <div class="top-stories-grid">
+                                    ${this.digestData.topStories.slice(0, 3).map((story, index) => `
+                                        <div class="top-story">
+                                            <div class="story-rank">${index + 1}</div>
+                                            <div class="story-content">
+                                                <div class="story-title">${story.title}</div>
+                                                <div class="story-source">${story.source}</div>
+                                            </div>
+                                            <div class="story-score">${story.significanceScore}/10</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
 
-                        <div class="content-section-header">
-                            <h3>${this.getSectionTitle()}</h3>
-                            <div class="ranking-badge">📊 Ranked by AI Significance</div>
-                        </div>
-
-                        <div class="news-items">
+                // Content section
+                html += `
+                    <div class="content-section">
+                        <h2 class="section-title">${this.getSectionTitle()}</h2>
+                        <div class="content-grid">
                             ${filteredContent.length > 0 
-                                ? filteredContent.map((item, index) => this.renderNewsItem(item, index)).join('')
-                                : '<div style="text-align: center; padding: 40px; color: #94a3b8;">No content available for this category.</div>'
+                                ? filteredContent.map((item, index) => this.renderContentCard(item, index)).join('')
+                                : '<div class="error-container">No content available for this category.</div>'
                             }
                         </div>
                     </div>
                 `;
-            }
 
-            renderTopStoriesSection() {
-                if (!this.digestData.topStories || this.digestData.topStories.length === 0) {
-                    return '';
-                }
-
-                return `
-                    <div class="top-stories-section">
-                        <div class="summary-title">
-                            🌟 Today's Most Significant AI Developments
-                        </div>
-                        <div class="top-stories-grid">
-                            ${this.digestData.topStories.slice(0, 3).map((story, index) => `
-                                <div class="top-story-card rank-${index + 1}">
-                                    <div class="story-rank">#${index + 1}</div>
-                                    <div class="story-content">
-                                        <div class="story-title">${story.title}</div>
-                                        <div class="story-source">${story.source}</div>
-                                        <div class="significance-bar">
-                                            <div class="significance-fill" style="width: ${(story.significanceScore / 10) * 100}%"></div>
-                                            <span class="significance-score">${story.significanceScore}/10</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-
-            renderSummarySection() {
-                return `
-                    <div class="summary-section">
-                        <div class="summary-title">
-                            📊 Today's AI Industry Summary
-                        </div>
-                        <div class="summary-text">
-                            ${this.digestData.summary}
-                        </div>
-                    </div>
-                `;
+                container.innerHTML = html;
             }
 
             getSectionTitle() {
                 const titles = {
-                    'all': 'All AI Updates',
-                    'blog': 'Top Blog Posts & Articles',
-                    'audio': 'Featured Podcasts & Audio',
-                    'video': 'Trending Videos & Demos'
+                    'all': 'Latest AI Updates',
+                    'blog': 'Featured Articles & Research',
+                    'audio': 'Podcasts & Audio Content',
+                    'video': 'Videos & Demonstrations'
                 };
                 return titles[this.currentFilter] || 'AI Updates';
             }
 
-            renderNewsItem(item, index) {
+            renderContentCard(item, index) {
                 const typeIcons = {
                     blog: '📝',
                     audio: '🎧',
@@ -1173,47 +1034,65 @@
 
                 const significanceScore = item.significanceScore || 5;
                 const rankPosition = index + 1;
+                const isExternalLink = item.url && item.url !== '#';
 
                 return `
-                    <div class="news-item" data-rank="${rankPosition}">
-                        <div class="news-ranking">
-                            <div class="rank-badge">${rankPosition}</div>
-                            <div class="significance-indicator">
-                                <div class="significance-meter">
-                                    <div class="meter-fill" style="height: ${(significanceScore / 10) * 100}%"></div>
-                                </div>
-                                <span class="significance-label">${significanceScore}/10</span>
-                            </div>
-                        </div>
-
-                        <div class="news-main-content">
-                            <div class="news-header">
-                                <div class="news-title">${item.title}</div>
-                                <div class="content-type-badge content-${item.type}">
+                    <div class="content-card">
+                        <div class="content-header">
+                            <div class="content-meta">
+                                <div class="content-rank">${rankPosition}</div>
+                                <div class="content-type ${item.type}">
                                     ${typeIcons[item.type]} ${item.type.toUpperCase()}
                                 </div>
                             </div>
-                            
-                            <div class="news-description">${item.description}</div>
-                            
-                            <div class="media-preview ${item.type}">
-                                <div class="media-meta">
-                                    <span class="news-source">${item.source}</span>
-                                    ${item.duration ? `<span class="duration-badge">⏱️ ${item.duration}</span>` : ''}
-                                    ${item.readTime ? `<span class="duration-badge">📖 ${item.readTime}</span>` : ''}
+                            <div class="significance-score">
+                                <div class="score-bar">
+                                    <div class="score-fill" style="width: ${(significanceScore / 10) * 100}%"></div>
                                 </div>
-                                <a href="${item.url}" class="view-link" target="_blank" rel="noopener noreferrer">
-                                    ${item.type === 'blog' ? 'Read Article' : item.type === 'audio' ? 'Listen Now' : 'Watch Video'} →
-                                </a>
+                                <span>${significanceScore}/10</span>
                             </div>
+                        </div>
 
-                            <div class="news-meta">
-                                <div class="news-time">🕒 ${item.time}</div>
+                        <h3 class="content-title">${item.title}</h3>
+                        <p class="content-description">${item.description}</p>
+
+                        <div class="content-footer">
+                            <div class="content-info">
+                                <div class="info-item">
+                                    <span>📍</span>
+                                    <span>${item.source}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span>🕒</span>
+                                    <span>${item.time}</span>
+                                </div>
+                                ${item.duration ? `
+                                    <div class="info-item">
+                                        <span>⏱️</span>
+                                        <span>${item.duration}</span>
+                                    </div>
+                                ` : ''}
+                                ${item.readTime ? `
+                                    <div class="info-item">
+                                        <span>📖</span>
+                                        <span>${item.readTime}</span>
+                                    </div>
+                                ` : ''}
                                 <div class="impact-badge impact-${item.impact}">
                                     ${item.impact} impact
                                 </div>
-                                ${significanceScore >= 8 ? '<div class="trending-badge">🔥 Trending</div>' : ''}
                             </div>
+                            
+                            ${isExternalLink ? 
+                                `<a href="${item.url}" class="action-button" target="_blank" rel="noopener noreferrer">
+                                    ${item.type === 'blog' ? 'Read Article' : item.type === 'audio' ? 'Listen Now' : 'Watch Video'}
+                                    <span>→</span>
+                                </a>` :
+                                `<button class="action-button" onclick="showComingSoon()">
+                                    ${item.type === 'blog' ? 'Read Article' : item.type === 'audio' ? 'Listen Now' : 'Watch Video'}
+                                    <span>→</span>
+                                </button>`
+                            }
                         </div>
                     </div>
                 `;
@@ -1223,13 +1102,8 @@
                 document.getElementById('digestContainer').innerHTML = `
                     <div class="loading-container">
                         <div class="loading-spinner"></div>
-                        <div class="loading-text">
-                            <div>🔍 Scanning AI news sources...</div>
-                            <div class="sub-text">Analyzing content with Claude AI...</div>
-                            <div class="progress-bar">
-                                <div class="progress-fill"></div>
-                            </div>
-                        </div>
+                        <div class="loading-text">Curating AI developments...</div>
+                        <div class="loading-subtext">Analyzing content with Claude AI</div>
                     </div>
                 `;
             }
@@ -1239,16 +1113,87 @@
                     <div class="error-container">
                         <h3>Unable to load AI digest</h3>
                         <p>There was an issue connecting to our content service.</p>
-                        <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 10px;">
-                            ${error.message || 'Please check your connection and try again.'}
+                        <p style="margin-top: 1rem; font-size: 0.875rem; opacity: 0.8;">
+                            ${error.message || 'Please try refreshing the page.'}
                         </p>
-                        <button class="refresh-btn" onclick="aiDigest.forceRefresh()">Retry</button>
+                        <button class="action-button" onclick="aiDigest.forceRefresh()" style="margin-top: 1.5rem;">
+                            <span>🔄</span>
+                            <span>Try Again</span>
+                        </button>
                     </div>
                 `;
             }
         }
 
-        const aiDigest = new AIDigestApp();
+        // Coming soon notification
+        function showComingSoon() {
+            // Create modern notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 16px;
+                z-index: 10000;
+                font-weight: 600;
+                font-size: 0.875rem;
+                box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+                backdrop-filter: blur(12px);
+                animation: slideInRight 0.3s ease;
+                max-width: 300px;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    <span>🚀</span>
+                    <strong>Coming Soon!</strong>
+                </div>
+                <div style="opacity: 0.9; font-weight: 400; line-height: 1.4;">
+                    We're working on real-time content aggregation for this category.
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Add slide-in animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideInRight {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOutRight {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Remove after 4 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                    if (document.head.contains(style)) {
+                        document.head.removeChild(style);
+                    }
+                }, 300);
+            }, 4000);
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            window.aiDigest = new AIDigestApp();
+        });
+
+        // Add smooth scrolling for better UX
+        document.documentElement.style.scrollBehavior = 'smooth';
     </script>
 </body>
 </html>
