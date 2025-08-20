@@ -985,7 +985,7 @@
             async loadDigest() {
                 try {
                     this.showLoadingState();
-                    const data = await this.fetchAINews();
+                    const data = this.getMockData();
                     this.digestData = data;
                     this.lastUpdateTime = new Date(data.timestamp);
                     this.renderDigest();
@@ -993,27 +993,6 @@
                 } catch (error) {
                     console.error('Error loading digest:', error);
                     this.showErrorState(error);
-                }
-            }
-
-            async fetchAINews() {
-                try {
-                    const response = await fetch(`${this.apiBaseUrl}/digest`, {
-                        method: 'GET',
-                        headers: { 'Content-Type': 'application/json' }
-                    });
-
-                    if (!response.ok) {
-                        console.log(`API returned ${response.status}, falling back to mock data`);
-                        return this.getMockData();
-                    }
-                    
-                    const data = await response.json();
-                    console.log('Successfully loaded data from API');
-                    return data;
-                } catch (error) {
-                    console.log('API fetch failed, using mock data:', error.message);
-                    return this.getMockData();
                 }
             }
 
@@ -1118,33 +1097,14 @@
             async forceRefresh() {
                 try {
                     this.showLoadingState();
-                    
-                    const response = await fetch(`${this.apiBaseUrl}/digest?refresh=1`, {
-                        method: 'GET',
-                        headers: { 'Content-Type': 'application/json' }
-                    });
-
-                    let data;
-                    if (!response.ok) {
-                        console.log(`API returned ${response.status}, falling back to mock data`);
-                        data = this.getMockData();
-                    } else {
-                        data = await response.json();
-                        console.log('Successfully refreshed data from API');
-                    }
-
-                    this.digestData = data;
-                    this.lastUpdateTime = new Date(data.timestamp);
-                    this.renderDigest();
-                    this.updateTimestamps();
-                    
-                } catch (error) {
-                    console.log('API refresh failed, using mock data:', error.message);
                     const data = this.getMockData();
                     this.digestData = data;
                     this.lastUpdateTime = new Date(data.timestamp);
                     this.renderDigest();
                     this.updateTimestamps();
+                } catch (error) {
+                    console.error('Error refreshing digest:', error);
+                    this.showErrorState(error);
                 }
             }
 
