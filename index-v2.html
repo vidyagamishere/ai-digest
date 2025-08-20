@@ -611,74 +611,6 @@
                 padding: 1.5rem 1rem;
             }
 
-            generateSourceUrl(source, title) {
-                // Generate intelligent source URLs based on the source name
-                const sourceMap = {
-                    'OpenAI': 'https://openai.com/blog',
-                    'DeepMind': 'https://deepmind.google/discover/blog',
-                    'Google': 'https://blog.google/technology/ai',
-                    'Microsoft': 'https://azure.microsoft.com/en-us/blog',
-                    'Meta': 'https://ai.meta.com/blog',
-                    'Anthropic': 'https://www.anthropic.com/news',
-                    'NVIDIA': 'https://blogs.nvidia.com/blog/category/artificial-intelligence',
-                    'Amazon': 'https://aws.amazon.com/blogs/machine-learning',
-                    'Apple': 'https://machinelearning.apple.com',
-                    'Tesla': 'https://www.tesla.com/blog',
-                    'Hugging Face': 'https://huggingface.co/blog',
-                    'Stability AI': 'https://stability.ai/blog',
-                    'Midjourney': 'https://docs.midjourney.com/blog',
-                    'Cohere': 'https://cohere.com/blog',
-                    'IBM': 'https://research.ibm.com/blog/ai',
-                    'Intel': 'https://www.intel.com/content/www/us/en/artificial-intelligence/posts.html'
-                };
-
-                // Try to find exact match first
-                if (sourceMap[source]) {
-                    return sourceMap[source];
-                }
-
-                // Try to find partial match (case insensitive)
-                const sourceKey = Object.keys(sourceMap).find(key => 
-                    key.toLowerCase().includes(source.toLowerCase()) || 
-                    source.toLowerCase().includes(key.toLowerCase())
-                );
-                
-                if (sourceKey) {
-                    return sourceMap[sourceKey];
-                }
-
-                // If no match found, create a Google search URL for the specific article
-                const searchQuery = encodeURIComponent(`${source} ${title}`);
-                return `https://www.google.com/search?q=${searchQuery}`;
-            }
-
-            formatSummaryAsPoints(summary) {
-                // If summary already has keyPoints array (structured format)
-                if (summary && summary.keyPoints && Array.isArray(summary.keyPoints)) {
-                    return summary.keyPoints.map(point => 
-                        `<div style="margin-bottom: 0.5rem; line-height: 1.5;">${point}</div>`
-                    ).join('');
-                }
-                
-                // If summary is a string (from actual API), convert to bullet points
-                if (typeof summary === 'string') {
-                    // Split by sentences and convert to bullet points
-                    const sentences = summary.split(/[.!?]+/).filter(s => s.trim().length > 0);
-                    return sentences.map(sentence => {
-                        const trimmed = sentence.trim();
-                        if (trimmed) {
-                            // Add bullet point if not already present
-                            const bulletPoint = trimmed.startsWith('•') ? trimmed : `• ${trimmed}`;
-                            return `<div style="margin-bottom: 0.5rem; line-height: 1.5;">${bulletPoint}</div>`;
-                        }
-                        return '';
-                    }).join('');
-                }
-                
-                // Fallback for any other format
-                return `<div style="margin-bottom: 0.5rem; line-height: 1.5;">• No summary available</div>`;
-            }
-
             .hero-title {
                 font-size: 2.5rem;
             }
@@ -814,6 +746,70 @@
             color: var(--primary);
         }
 
+        /* Ad Containers */
+        .ad-container {
+            background: var(--background-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 2rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .ad-label {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.75rem;
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .ad-placeholder {
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-tertiary);
+            font-size: 0.875rem;
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            background: var(--background);
+        }
+
+        /* Sidebar Ad */
+        .sidebar-ad {
+            position: sticky;
+            top: 120px;
+            width: 300px;
+            margin-left: 2rem;
+            flex-shrink: 0;
+        }
+
+        .content-with-sidebar {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* Responsive ad handling */
+        @media (max-width: 1400px) {
+            .sidebar-ad {
+                display: none;
+            }
+            
+            .content-with-sidebar {
+                display: block;
+            }
+        }
+
         @media (max-width: 768px) {
             .footer-grid {
                 grid-template-columns: 1fr;
@@ -881,9 +877,25 @@
             <button class="tab-button" data-type="video">🎥 Videos</button>
         </div>
 
-        <!-- Content Container -->
-        <div id="digestContainer">
-            <!-- Content will be populated by JavaScript -->
+        <!-- Content with Sidebar Layout -->
+        <div class="content-with-sidebar">
+            <!-- Main Content Container -->
+            <div class="main-content">
+                <div id="digestContainer">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Sidebar Ad -->
+            <aside class="sidebar-ad">
+                <div class="ad-container">
+                    <div class="ad-label">Advertisement</div>
+                    <div id="sidebar-ad">
+                        <!-- Google Ad will be inserted here -->
+                        <div class="ad-placeholder">Advertisement Space</div>
+                    </div>
+                </div>
+            </aside>
         </div>
     </main>
 
@@ -947,7 +959,124 @@
         </div>
     </footer>
 
+    <!-- 
+    GOOGLE ADSENSE SETUP INSTRUCTIONS:
+    
+    1. CREATE ADSENSE ACCOUNT:
+       - Go to www.adsense.google.com
+       - Click "Get started" and sign in with Google account
+       - Add your website: vidyagam.com
+       - Wait for approval (1-7 days)
+    
+    2. GET YOUR PUBLISHER ID:
+       - After approval, go to AdSense dashboard
+       - Your Publisher ID will be in format: ca-pub-1234567890123456
+       - Copy this ID
+    
+    3. CREATE AD UNITS:
+       - In AdSense dashboard: Ads > By ad unit > Display ads
+       - Create 3 ad units:
+         * Sidebar Ad (300x250 rectangle)
+         * In-Content Ad (responsive rectangle)
+         * Banner Ad (responsive)
+       - Copy each ad unit ID (format: 1234567890)
+    
+    4. UPDATE THIS HTML FILE:
+       - Uncomment the script tag below
+       - Replace ca-pub-XXXXXXXXXX with your actual Publisher ID
+       - In JavaScript section, update adsConfig object:
+         * Set enabled: true
+         * Replace publisherId with your ID
+         * Replace ad slot IDs with your actual ad unit IDs
+    
+    5. DEPLOY CHANGES:
+       - Upload updated HTML to your server
+       - AdSense will start showing ads within 24 hours
+    -->
+    
+    <!-- STEP 4A: Uncomment this line and replace with your Publisher ID -->
+    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX" crossorigin="anonymous"></script> -->
     <script>
+        /*
+        STEP 4B: AFTER GETTING ADSENSE APPROVAL, UPDATE THESE VALUES:
+        
+        Example of what your final configuration should look like:
+        
+        const adsConfig = {
+            enabled: true,                           // Change to true
+            publisherId: 'ca-pub-1234567890123456',  // Your actual Publisher ID
+            adSlots: {
+                sidebar: '9876543210',               // Your sidebar ad unit ID
+                banner: '1357924680',                // Your banner ad unit ID  
+                inContent: '2468013579'              // Your in-content ad unit ID
+            }
+        };
+        */
+        
+        // Google Ads configuration
+        // IMPORTANT: Set enabled to false until you get AdSense approval
+        const adsConfig = {
+            enabled: false, // Change to true after AdSense approval
+            publisherId: 'ca-pub-XXXXXXXXXX', // Replace with your actual publisher ID from AdSense
+            adSlots: {
+                sidebar: 'XXXXXXXXXX', // Replace with your sidebar ad unit ID
+                banner: 'XXXXXXXXXX', // Replace with your banner ad unit ID  
+                inContent: 'XXXXXXXXXX' // Replace with your in-content ad unit ID
+            }
+        };
+
+        // Initialize Google Ads
+        function initializeAds() {
+            if (!adsConfig.enabled) return;
+
+            // Load sidebar ad
+            const sidebarAdContainer = document.getElementById('sidebar-ad');
+            if (sidebarAdContainer && window.innerWidth > 1400) {
+                sidebarAdContainer.innerHTML = `
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="${adsConfig.publisherId}"
+                         data-ad-slot="${adsConfig.adSlots.sidebar}"
+                         data-ad-format="rectangle"
+                         data-full-width-responsive="false"></ins>
+                `;
+                
+                try {
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                } catch (e) {
+                    console.log('Ad loading deferred');
+                }
+            }
+        }
+
+        // Insert in-content ad between articles
+        function insertInContentAd(container, position = 2) {
+            if (!adsConfig.enabled) return;
+
+            const adElement = document.createElement('div');
+            adElement.className = 'ad-container';
+            adElement.innerHTML = `
+                <div class="ad-label">Advertisement</div>
+                <ins class="adsbygoogle"
+                     style="display:block; margin: 1rem 0;"
+                     data-ad-client="${adsConfig.publisherId}"
+                     data-ad-slot="${adsConfig.adSlots.inContent}"
+                     data-ad-format="rectangle"
+                     data-full-width-responsive="true"></ins>
+            `;
+
+            const contentCards = container.querySelectorAll('.content-card');
+            if (contentCards.length > position) {
+                contentCards[position].parentNode.insertBefore(adElement, contentCards[position].nextSibling);
+                
+                try {
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                } catch (e) {
+                    console.log('In-content ad loading deferred');
+                }
+            }
+        }
+
         // Theme toggle functionality
         function toggleTheme() {
             const body = document.body;
@@ -1093,9 +1222,7 @@
                             "• Google DeepMind announced breakthrough in protein folding accuracy",
                             "• Microsoft Azure AI expanded to 15 new regions globally",
                             "• Meta's Code Llama 2 achieved 85% accuracy on coding benchmarks",
-                            "• Anthropic published safety research on constitutional AI methods",
-                            "• NVIDIA unveiled new H200 chips for enterprise AI workloads",
-                            "• Amazon's Alexa integration with generative AI reached public beta"
+                            "• Anthropic published safety research on constitutional AI methods"
                         ],
                         metrics: {
                             totalUpdates: 47,
@@ -1113,7 +1240,7 @@
                                 time: "2 hours ago",
                                 impact: "high",
                                 type: "blog",
-                                url: "https://openai.com/blog",
+                                url: "https://openai.com/research/gpt-4-5-enhanced-reasoning",
                                 readTime: "5 min read",
                                 significanceScore: 9.2
                             }
@@ -1126,7 +1253,7 @@
                                 time: "4 hours ago",
                                 impact: "medium",
                                 type: "audio",
-                                url: "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5zaW1wbGVjYXN0LmNvbS84NFJQemZRNQ",
+                                url: "https://podcasts.google.com/ai-weekly-roundup",
                                 duration: "32 min",
                                 significanceScore: 6.5
                             }
@@ -1139,7 +1266,7 @@
                                 time: "2 hours ago",
                                 impact: "high",
                                 type: "video",
-                                url: "https://www.youtube.com/watch?v=demo",
+                                url: "https://youtube.com/watch?v=ai-breakthrough-demo",
                                 duration: "15 min",
                                 significanceScore: 7.8
                             }
@@ -1150,19 +1277,19 @@
                             title: "OpenAI Unveils GPT-4.5 with Enhanced Reasoning",
                             source: "OpenAI",
                             significanceScore: 9.2,
-                            url: "https://openai.com/blog"
+                            url: "https://openai.com/research/gpt-4-5-enhanced-reasoning"
                         },
                         {
                             title: "Google DeepMind Protein Folding Breakthrough",
                             source: "DeepMind",
                             significanceScore: 8.7,
-                            url: "https://deepmind.google/discover/blog"
+                            url: "https://deepmind.google/research/protein-folding-breakthrough"
                         },
                         {
                             title: "Microsoft Azure AI Global Expansion",
                             source: "Microsoft",
                             significanceScore: 7.3,
-                            url: "https://azure.microsoft.com/en-us/blog"
+                            url: "https://azure.microsoft.com/blog/ai-expansion-announcement"
                         }
                     ],
                     timestamp: now.toISOString(),
@@ -1231,9 +1358,14 @@
                             <div class="summary-content">
                                 <div style="margin-bottom: 1.5rem;">
                                     <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; opacity: 0.9;">Key Developments:</h4>
-                                    ${this.formatSummaryAsPoints(this.digestData.summary)}
+                                    ${this.digestData.summary.keyPoints ? 
+                                        this.digestData.summary.keyPoints.map(point => 
+                                            `<div style="margin-bottom: 0.5rem; line-height: 1.5;">${point}</div>`
+                                        ).join('') : 
+                                        this.digestData.summary
+                                    }
                                 </div>
-                                ${this.digestData.summary && this.digestData.summary.metrics ? `
+                                ${this.digestData.summary.metrics ? `
                                     <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2);">
                                         <div style="text-align: center;">
                                             <div style="font-size: 1.5rem; font-weight: 700;">${this.digestData.summary.metrics.totalUpdates}</div>
@@ -1263,20 +1395,16 @@
                             <div class="top-stories">
                                 <h2 class="section-title">🌟 Most Significant Developments</h2>
                                 <div class="top-stories-grid">
-                                    ${this.digestData.topStories.slice(0, 3).map((story, index) => {
-                                        // Use the actual source URL from the API response, or fallback to a search
-                                        const storyUrl = story.url || story.sourceUrl || story.link || this.generateSourceUrl(story.source, story.title);
-                                        return `
-                                            <a href="${storyUrl}" target="_blank" rel="noopener noreferrer" class="top-story">
-                                                <div class="story-rank">${index + 1}</div>
-                                                <div class="story-content">
-                                                    <div class="story-title">${story.title}</div>
-                                                    <div class="story-source">${story.source}</div>
-                                                </div>
-                                                <div class="story-score">${story.significanceScore}/10</div>
-                                            </a>
-                                        `;
-                                    }).join('')}
+                                    ${this.digestData.topStories.slice(0, 3).map((story, index) => `
+                                        <a href="${story.url || '#'}" target="_blank" rel="noopener noreferrer" class="top-story">
+                                            <div class="story-rank">${index + 1}</div>
+                                            <div class="story-content">
+                                                <div class="story-title">${story.title}</div>
+                                                <div class="story-source">${story.source}</div>
+                                            </div>
+                                            <div class="story-score">${story.significanceScore}/10</div>
+                                        </a>
+                                    `).join('')}
                                 </div>
                             </div>
                         `;
@@ -1297,6 +1425,13 @@
                 `;
 
                 container.innerHTML = html;
+                
+                // Insert in-content ads after rendering
+                if (this.currentFilter === 'all' && filteredContent.length > 3) {
+                    setTimeout(() => {
+                        insertInContentAd(container, 2); // Insert ad after 3rd article
+                    }, 100);
+                }
             }
 
             getSectionTitle() {
@@ -1474,10 +1609,27 @@
         document.addEventListener('DOMContentLoaded', () => {
             initTheme();
             window.aiDigest = new AIDigestApp();
+            
+            // Initialize ads after a short delay to ensure content is loaded
+            setTimeout(() => {
+                initializeAds();
+            }, 1000);
         });
 
         // Add smooth scrolling for better UX
         document.documentElement.style.scrollBehavior = 'smooth';
+
+        // Handle responsive ad visibility
+        window.addEventListener('resize', () => {
+            const sidebarAd = document.querySelector('.sidebar-ad');
+            if (sidebarAd) {
+                if (window.innerWidth <= 1400) {
+                    sidebarAd.style.display = 'none';
+                } else {
+                    sidebarAd.style.display = 'block';
+                }
+            }
+        });
     </script>
     </script>
 </body>
