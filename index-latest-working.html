@@ -877,8 +877,6 @@
         </div>
     </footer>
 
-    <!-- Configuration -->
-    <script src="config.js"></script>
     <script>
         // Theme toggle functionality
         function toggleTheme() {
@@ -919,72 +917,10 @@
             init() {
                 this.setupEventListeners();
                 this.updateTimestamps();
-                this.loadConfiguration();
                 this.loadDigest();
                 
-                // Update timestamps every minute
                 setInterval(() => this.updateTimestamps(), 60000);
-                
-                // Set up automatic refresh twice daily (8 AM and 6 PM ET)
-                this.scheduleAutomaticRefresh();
-            }
-
-            loadConfiguration() {
-                if (window.aiSourceConfig) {
-                    const enabledSources = window.aiSourceConfig.sources.filter(s => s.enabled);
-                    console.log(`Configuration loaded: ${enabledSources.length} sources enabled`);
-                    console.log('Enabled sources:', enabledSources.map(s => s.name).join(', '));
-                } else {
-                    console.log('No configuration file found, using default source mapping');
-                }
-            }
-
-            scheduleAutomaticRefresh() {
-                const checkAndRefresh = () => {
-                    const now = new Date();
-                    const et = new Date(now.toLocaleString("en-US", {timeZone: "America/New_York"}));
-                    const currentHour = et.getHours();
-                    const currentMinute = et.getMinutes();
-                    
-                    // Check if it's 8:00 AM or 6:00 PM ET (allowing for 1-minute window)
-                    if ((currentHour === 8 || currentHour === 18) && currentMinute === 0) {
-                        console.log(`Automatic refresh triggered at ${currentHour === 8 ? '8 AM' : '6 PM'} ET`);
-                        this.loadDigest();
-                    }
-                };
-                
-                // Check every minute for scheduled refresh times
-                setInterval(checkAndRefresh, 60000);
-                
-                // Also set up next scheduled refresh calculation
-                this.calculateNextRefresh();
-            }
-
-            calculateNextRefresh() {
-                const now = new Date();
-                const et = new Date(now.toLocaleString("en-US", {timeZone: "America/New_York"}));
-                
-                const morningUpdate = new Date(et);
-                morningUpdate.setHours(8, 0, 0, 0);
-                
-                const eveningUpdate = new Date(et);
-                eveningUpdate.setHours(18, 0, 0, 0);
-                
-                let nextRefresh;
-                if (et < morningUpdate) {
-                    nextRefresh = morningUpdate;
-                } else if (et < eveningUpdate) {
-                    nextRefresh = eveningUpdate;
-                } else {
-                    // Next refresh is tomorrow morning
-                    nextRefresh = new Date(morningUpdate);
-                    nextRefresh.setDate(nextRefresh.getDate() + 1);
-                }
-                
-                const timeUntilRefresh = nextRefresh.getTime() - et.getTime();
-                console.log(`Next automatic refresh in ${Math.round(timeUntilRefresh / (1000 * 60 * 60))} hours`);
-                
-                return nextRefresh;
+                setInterval(() => this.loadDigest(), 1800000);
             }
 
             setupEventListeners() {
@@ -1335,36 +1271,21 @@
             }
 
             generateSourceUrl(source, title) {
-                // Use configuration if available, otherwise fall back to hardcoded mapping
-                let sourceMap = {};
-                
-                if (window.aiSourceConfig && window.aiSourceConfig.sources) {
-                    // Build source map from configuration
-                    window.aiSourceConfig.sources.forEach(src => {
-                        if (src.enabled) {
-                            sourceMap[src.name] = src.url;
-                        }
-                    });
-                } else {
-                    // Fallback to hardcoded mapping
-                    sourceMap = {
-                        'OpenAI': 'https://openai.com/blog',
-                        'DeepMind': 'https://deepmind.google/discover/blog',
-                        'Google': 'https://blog.google/technology/ai',
-                        'Microsoft': 'https://azure.microsoft.com/en-us/blog',
-                        'Meta': 'https://ai.meta.com/blog',
-                        'Anthropic': 'https://www.anthropic.com/news',
-                        'NVIDIA': 'https://blogs.nvidia.com/blog/category/artificial-intelligence',
-                        'Amazon': 'https://aws.amazon.com/blogs/machine-learning'
-                    };
-                }
+                const sourceMap = {
+                    'OpenAI': 'https://openai.com/blog',
+                    'DeepMind': 'https://deepmind.google/discover/blog',
+                    'Google': 'https://blog.google/technology/ai',
+                    'Microsoft': 'https://azure.microsoft.com/en-us/blog',
+                    'Meta': 'https://ai.meta.com/blog',
+                    'Anthropic': 'https://www.anthropic.com/news',
+                    'NVIDIA': 'https://blogs.nvidia.com/blog/category/artificial-intelligence',
+                    'Amazon': 'https://aws.amazon.com/blogs/machine-learning'
+                };
 
-                // Try exact match first
                 if (sourceMap[source]) {
                     return sourceMap[source];
                 }
 
-                // Try partial match (case insensitive)
                 const sourceKey = Object.keys(sourceMap).find(key => 
                     key.toLowerCase().includes(source.toLowerCase()) || 
                     source.toLowerCase().includes(key.toLowerCase())
@@ -1374,17 +1295,8 @@
                     return sourceMap[sourceKey];
                 }
 
-                // Check if fallback search is enabled in config
-                const allowFallback = window.aiSourceConfig ? 
-                    window.aiSourceConfig.fallbackSearch !== false : true;
-
-                if (allowFallback) {
-                    const searchQuery = encodeURIComponent(`${source} ${title}`);
-                    return `https://www.google.com/search?q=${searchQuery}`;
-                }
-
-                // Return empty if no fallback allowed
-                return '#';
+                const searchQuery = encodeURIComponent(`${source} ${title}`);
+                return `https://www.google.com/search?q=${searchQuery}`;
             }
 
             getSectionTitle() {
