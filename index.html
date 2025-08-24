@@ -14,6 +14,10 @@
     <!-- Google Sign-In -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     
+    <!-- Meta tags for Google Sign-In -->
+    <meta name="google-signin-client_id" content="450435096536-tbor1sbkbq27si62ps7khr5fdat5indb.apps.googleusercontent.com">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
     <style>
         :root {
             --primary: #2563eb;
@@ -1020,11 +1024,16 @@
                 
                 <!-- Auth Section -->
                 <div id="auth-section">
-                    <button class="auth-btn" id="login-btn" onclick="initGoogleSignIn()">
+                    <!-- Custom Sign-In Button (fallback) -->
+                    <button class="auth-btn" id="login-btn" onclick="initGoogleSignIn()" style="display: none;">
                         <span>👤</span>
-                        <span>Sign In</span>
+                        <span>Sign In with Google</span>
                     </button>
                     
+                    <!-- Google Sign-In Button Container -->
+                    <div id="google-signin-button" style="display: none;"></div>
+                    
+                    <!-- User Menu (shown after sign-in) -->
                     <div class="user-menu" id="user-menu" style="display: none;">
                         <img class="user-avatar" id="user-avatar" onclick="toggleUserDropdown()" alt="User Avatar">
                         <div class="user-dropdown" id="user-dropdown">
@@ -2035,20 +2044,44 @@
         function initGoogleSignIn() {
             if (typeof google === 'undefined') {
                 console.error('Google Sign-In library not loaded');
+                alert('Google Sign-In is not available. Please refresh the page and try again.');
                 return;
             }
             
-            google.accounts.id.initialize({
-                client_id: window.ENV_CONFIG?.GOOGLE_CLIENT_ID || 'your-google-client-id.apps.googleusercontent.com',
-                callback: handleGoogleSignIn
-            });
-            
-            google.accounts.id.prompt();
+            try {
+                console.log('Initializing Google Sign-In with Client ID:', window.ENV_CONFIG?.GOOGLE_CLIENT_ID);
+                
+                google.accounts.id.initialize({
+                    client_id: window.ENV_CONFIG?.GOOGLE_CLIENT_ID || '450435096536-tbor1sbkbq27si62ps7khr5fdat5indb.apps.googleusercontent.com',
+                    callback: handleGoogleSignIn,
+                    auto_select: false,
+                    cancel_on_tap_outside: false
+                });
+                
+                // Render the button instead of using prompt
+                google.accounts.id.renderButton(
+                    document.getElementById("google-signin-button"),
+                    { 
+                        theme: "outline", 
+                        size: "large",
+                        width: "300",
+                        text: "signin_with"
+                    }
+                );
+                
+                console.log('Google Sign-In initialized successfully');
+            } catch (error) {
+                console.error('Error initializing Google Sign-In:', error);
+                alert('Failed to initialize Google Sign-In. Please check your internet connection.');
+            }
         }
         
         // Handle Google Sign-In response
         async function handleGoogleSignIn(response) {
+            console.log('Google Sign-In response received:', response);
+            
             try {
+                console.log('Attempting to authenticate with backend...');
                 const authResponse = await fetch(`${window.ENV_API_URL}/auth/google`, {
                     method: 'POST',
                     headers: {
@@ -2056,10 +2089,18 @@
                     },
                     body: JSON.stringify({
                         token: response.credential
-                    })
+                    }),
+                    timeout: 30000 // 30 second timeout
                 });
                 
+                console.log('Backend response status:', authResponse.status);
+                
+                if (authResponse.status === 504) {
+                    throw new Error('Backend server is unavailable (504). Please try again in a few minutes.');
+                }
+                
                 const authData = await authResponse.json();
+                console.log('Backend response data:', authData);
                 
                 if (authResponse.ok) {
                     currentUser = authData.user;
@@ -2071,26 +2112,39 @@
                     
                     updateAuthUI();
                     loadUserPreferences();
+                    
+                    console.log('Authentication successful!');
+                    alert('Successfully signed in!');
                 } else {
-                    throw new Error(authData.detail || 'Authentication failed');
+                    throw new Error(authData.detail || `Authentication failed (${authResponse.status})`);
                 }
             } catch (error) {
                 console.error('Authentication error:', error);
-                alert('Authentication failed. Please try again.');
+                
+                // More specific error messages
+                if (error.message.includes('504')) {
+                    alert('Server is currently unavailable. Please try again in a few minutes.');
+                } else if (error.message.includes('Failed to fetch')) {
+                    alert('Network error. Please check your internet connection and try again.');
+                } else {
+                    alert(`Authentication failed: ${error.message}`);
+                }
             }
         }
         
         // Update authentication UI
         function updateAuthUI() {
             const loginBtn = document.getElementById('login-btn');
+            const googleSigninButton = document.getElementById('google-signin-button');
             const userMenu = document.getElementById('user-menu');
             const userAvatar = document.getElementById('user-avatar');
             const userName = document.getElementById('user-name');
             const userEmail = document.getElementById('user-email');
             
             if (currentUser && userToken) {
-                // Show user menu, hide login button
+                // Show user menu, hide login buttons
                 loginBtn.style.display = 'none';
+                googleSigninButton.style.display = 'none';
                 userMenu.style.display = 'block';
                 
                 // Update user info
@@ -2098,9 +2152,17 @@
                 userName.textContent = currentUser.name;
                 userEmail.textContent = currentUser.email;
             } else {
-                // Show login button, hide user menu
-                loginBtn.style.display = 'flex';
+                // Show appropriate login button, hide user menu
                 userMenu.style.display = 'none';
+                
+                // Try to show Google button first, fallback to custom button
+                if (typeof google !== 'undefined') {
+                    googleSigninButton.style.display = 'block';
+                    loginBtn.style.display = 'none';
+                } else {
+                    googleSigninButton.style.display = 'none';
+                    loginBtn.style.display = 'flex';
+                }
             }
         }
         
@@ -2320,6 +2382,29 @@
                     localStorage.removeItem('user_data');
                 }
             }
+            
+            // Initialize Google Sign-In when library loads
+            if (typeof google !== 'undefined') {
+                initGoogleSignIn();
+            } else {
+                // Wait for Google library to load
+                let attempts = 0;
+                const checkGoogle = setInterval(() => {
+                    attempts++;
+                    if (typeof google !== 'undefined') {
+                        clearInterval(checkGoogle);
+                        initGoogleSignIn();
+                    } else if (attempts > 20) { // Stop after 10 seconds
+                        clearInterval(checkGoogle);
+                        console.error('Google Sign-In library failed to load');
+                        // Show fallback button
+                        document.getElementById('login-btn').style.display = 'flex';
+                    }
+                }, 500);
+            }
+            
+            // Update UI
+            updateAuthUI();
             
             // Initialize checkbox handlers
             setTimeout(handleAllCheckboxes, 100);
