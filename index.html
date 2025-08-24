@@ -11,6 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Google Sign-In -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
     <style>
         :root {
             --primary: #2563eb;
@@ -153,6 +156,239 @@
         .refresh-btn:hover {
             background: var(--primary-dark);
             transform: translateY(-1px);
+        }
+
+        .auth-btn {
+            padding: 0.5rem 1rem;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+        }
+
+        .auth-btn:hover {
+            background: #0f9a72;
+            transform: translateY(-1px);
+        }
+
+        .user-menu {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .user-avatar:hover {
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            min-width: 200px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .user-dropdown.show {
+            display: block;
+        }
+
+        .user-info {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .user-email {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background: var(--background-secondary);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--background);
+            border-radius: 16px;
+            box-shadow: var(--shadow-xl);
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            padding: 0.25rem;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: var(--background-secondary);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--background);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .form-checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-checkbox input {
+            width: 16px;
+            height: 16px;
+        }
+
+        .form-checkbox label {
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--background-secondary);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--background-tertiary);
         }
 
         /* Main Content */
@@ -781,6 +1017,32 @@
                     <span>🔄</span>
                     <span>Refresh</span>
                 </button>
+                
+                <!-- Auth Section -->
+                <div id="auth-section">
+                    <button class="auth-btn" id="login-btn" onclick="initGoogleSignIn()">
+                        <span>👤</span>
+                        <span>Sign In</span>
+                    </button>
+                    
+                    <div class="user-menu" id="user-menu" style="display: none;">
+                        <img class="user-avatar" id="user-avatar" onclick="toggleUserDropdown()" alt="User Avatar">
+                        <div class="user-dropdown" id="user-dropdown">
+                            <div class="user-info">
+                                <div class="user-name" id="user-name"></div>
+                                <div class="user-email" id="user-email"></div>
+                            </div>
+                            <div class="dropdown-item" onclick="openPreferences()">
+                                <span>⚙️</span>
+                                <span>Preferences</span>
+                            </div>
+                            <div class="dropdown-item" onclick="signOut()">
+                                <span>🚪</span>
+                                <span>Sign Out</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -878,6 +1140,85 @@
     </footer>
 
     <!-- Environment Configuration -->
+    <!-- Preferences Modal -->
+    <div class="modal-overlay" id="preferences-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Subscription Preferences</h2>
+                <button class="modal-close" onclick="closePreferences()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="preferences-form">
+                    <div class="form-group">
+                        <label class="form-label">Email Frequency</label>
+                        <select class="form-select" id="frequency-select">
+                            <option value="daily">Daily Digest</option>
+                            <option value="weekly">Weekly Summary</option>
+                            <option value="bi-weekly">Bi-weekly Update</option>
+                            <option value="monthly">Monthly Report</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Content Types</label>
+                        <div class="form-checkbox-group">
+                            <div class="form-checkbox">
+                                <input type="checkbox" id="content-all" value="all" checked>
+                                <label for="content-all">All Content</label>
+                            </div>
+                            <div class="form-checkbox">
+                                <input type="checkbox" id="content-blog" value="blog">
+                                <label for="content-blog">Blog Posts</label>
+                            </div>
+                            <div class="form-checkbox">
+                                <input type="checkbox" id="content-audio" value="audio">
+                                <label for="content-audio">Podcasts/Audio</label>
+                            </div>
+                            <div class="form-checkbox">
+                                <input type="checkbox" id="content-video" value="video">
+                                <label for="content-video">Videos</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">AI Categories</label>
+                        <div class="form-checkbox-group">
+                            <div class="form-checkbox">
+                                <input type="checkbox" id="category-all" value="all" checked>
+                                <label for="category-all">All Categories</label>
+                            </div>
+                            <div class="form-checkbox">
+                                <input type="checkbox" id="category-research" value="research">
+                                <label for="category-research">Research & Papers</label>
+                            </div>
+                            <div class="form-checkbox">
+                                <input type="checkbox" id="category-industry" value="industry">
+                                <label for="category-industry">Industry News</label>
+                            </div>
+                            <div class="form-checkbox">
+                                <input type="checkbox" id="category-tools" value="tools">
+                                <label for="category-tools">Tools & Platforms</label>
+                            </div>
+                            <div class="form-checkbox">
+                                <input type="checkbox" id="category-regulations" value="regulations">
+                                <label for="category-regulations">Policy & Ethics</label>
+                            </div>
+                            <div class="form-checkbox">
+                                <input type="checkbox" id="category-startups" value="startups">
+                                <label for="category-startups">Startups & Funding</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closePreferences()">Cancel</button>
+                <button class="btn btn-primary" onclick="savePreferences()">Save Preferences</button>
+            </div>
+        </div>
+    </div>
+
     <script src="env.config.js"></script>
     
     <!-- Configuration with Top 50 AI Resources -->
@@ -999,7 +1340,11 @@
             getApiBaseUrl() {
                 // Production API URL (will be set as environment variable in Vercel)
                 if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
-                    return window.ENV_API_URL || 'https://your-api-domain.vercel.app/api';
+                    const baseUrl = window.ENV_API_URL || window.ENV_CONFIG?.API_URL || 'https://ai-news-scraper.vercel.app';
+                    console.log('ENV_API_URL:', window.ENV_API_URL);
+                    console.log('ENV_CONFIG.API_URL:', window.ENV_CONFIG?.API_URL);
+                    console.log('Final API base URL:', baseUrl + '/api');
+                    return baseUrl + '/api';
                 }
                 // Development
                 return 'http://localhost:8000/api';
@@ -1678,6 +2023,314 @@
         });
 
         document.documentElement.style.scrollBehavior = 'smooth';
+    </script>
+
+    <!-- Authentication and Preferences JavaScript -->
+    <script>
+        // Authentication state
+        let currentUser = null;
+        let userToken = null;
+        
+        // Initialize Google Sign-In
+        function initGoogleSignIn() {
+            if (typeof google === 'undefined') {
+                console.error('Google Sign-In library not loaded');
+                return;
+            }
+            
+            google.accounts.id.initialize({
+                client_id: window.ENV_CONFIG?.GOOGLE_CLIENT_ID || 'your-google-client-id.apps.googleusercontent.com',
+                callback: handleGoogleSignIn
+            });
+            
+            google.accounts.id.prompt();
+        }
+        
+        // Handle Google Sign-In response
+        async function handleGoogleSignIn(response) {
+            try {
+                const authResponse = await fetch(`${window.ENV_API_URL}/auth/google`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        token: response.credential
+                    })
+                });
+                
+                const authData = await authResponse.json();
+                
+                if (authResponse.ok) {
+                    currentUser = authData.user;
+                    userToken = authData.access_token;
+                    
+                    // Save token to localStorage
+                    localStorage.setItem('auth_token', userToken);
+                    localStorage.setItem('user_data', JSON.stringify(currentUser));
+                    
+                    updateAuthUI();
+                    loadUserPreferences();
+                } else {
+                    throw new Error(authData.detail || 'Authentication failed');
+                }
+            } catch (error) {
+                console.error('Authentication error:', error);
+                alert('Authentication failed. Please try again.');
+            }
+        }
+        
+        // Update authentication UI
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('login-btn');
+            const userMenu = document.getElementById('user-menu');
+            const userAvatar = document.getElementById('user-avatar');
+            const userName = document.getElementById('user-name');
+            const userEmail = document.getElementById('user-email');
+            
+            if (currentUser && userToken) {
+                // Show user menu, hide login button
+                loginBtn.style.display = 'none';
+                userMenu.style.display = 'block';
+                
+                // Update user info
+                userAvatar.src = currentUser.profile_picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=2563eb&color=fff`;
+                userName.textContent = currentUser.name;
+                userEmail.textContent = currentUser.email;
+            } else {
+                // Show login button, hide user menu
+                loginBtn.style.display = 'flex';
+                userMenu.style.display = 'none';
+            }
+        }
+        
+        // Toggle user dropdown
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('user-dropdown');
+            dropdown.classList.toggle('show');
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const userMenu = document.getElementById('user-menu');
+            const dropdown = document.getElementById('user-dropdown');
+            
+            if (!userMenu.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+        
+        // Sign out
+        function signOut() {
+            currentUser = null;
+            userToken = null;
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            localStorage.removeItem('user_preferences');
+            
+            updateAuthUI();
+            
+            // Sign out from Google
+            if (typeof google !== 'undefined' && google.accounts.id) {
+                google.accounts.id.disableAutoSelect();
+            }
+        }
+        
+        // Open preferences modal
+        function openPreferences() {
+            const modal = document.getElementById('preferences-modal');
+            modal.classList.add('show');
+            loadUserPreferences();
+        }
+        
+        // Close preferences modal
+        function closePreferences() {
+            const modal = document.getElementById('preferences-modal');
+            modal.classList.remove('show');
+        }
+        
+        // Load user preferences
+        async function loadUserPreferences() {
+            if (!userToken) return;
+            
+            try {
+                const response = await fetch(`${window.ENV_API_URL}/subscription/preferences`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${userToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    populatePreferencesForm(data.preferences);
+                } else {
+                    console.error('Failed to load preferences');
+                }
+            } catch (error) {
+                console.error('Error loading preferences:', error);
+            }
+        }
+        
+        // Populate preferences form
+        function populatePreferencesForm(preferences) {
+            // Set frequency
+            const frequencySelect = document.getElementById('frequency-select');
+            frequencySelect.value = preferences.frequency || 'daily';
+            
+            // Set content types
+            const contentTypes = Array.isArray(preferences.content_types) ? preferences.content_types : ['all'];
+            const contentCheckboxes = document.querySelectorAll('input[type="checkbox"][id^="content-"]');
+            
+            contentCheckboxes.forEach(checkbox => {
+                checkbox.checked = contentTypes.includes(checkbox.value);
+            });
+            
+            // Set categories
+            const categories = Array.isArray(preferences.categories) ? preferences.categories : ['all'];
+            const categoryCheckboxes = document.querySelectorAll('input[type="checkbox"][id^="category-"]');
+            
+            categoryCheckboxes.forEach(checkbox => {
+                checkbox.checked = categories.includes(checkbox.value);
+            });
+            
+            // Handle "All" checkboxes
+            handleAllCheckboxes();
+        }
+        
+        // Handle "All" checkboxes behavior
+        function handleAllCheckboxes() {
+            // Content types "All" checkbox
+            const contentAll = document.getElementById('content-all');
+            const contentCheckboxes = document.querySelectorAll('input[type="checkbox"][id^="content-"]:not(#content-all)');
+            
+            contentAll.addEventListener('change', function() {
+                contentCheckboxes.forEach(cb => {
+                    cb.checked = this.checked;
+                    cb.disabled = this.checked;
+                });
+            });
+            
+            contentCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (!this.checked) {
+                        contentAll.checked = false;
+                    }
+                    
+                    const allOthersChecked = Array.from(contentCheckboxes).every(cb => cb.checked);
+                    if (allOthersChecked) {
+                        contentAll.checked = true;
+                        contentCheckboxes.forEach(cb => cb.disabled = true);
+                    }
+                });
+            });
+            
+            // Categories "All" checkbox
+            const categoryAll = document.getElementById('category-all');
+            const categoryCheckboxes = document.querySelectorAll('input[type="checkbox"][id^="category-"]:not(#category-all)');
+            
+            categoryAll.addEventListener('change', function() {
+                categoryCheckboxes.forEach(cb => {
+                    cb.checked = this.checked;
+                    cb.disabled = this.checked;
+                });
+            });
+            
+            categoryCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (!this.checked) {
+                        categoryAll.checked = false;
+                    }
+                    
+                    const allOthersChecked = Array.from(categoryCheckboxes).every(cb => cb.checked);
+                    if (allOthersChecked) {
+                        categoryAll.checked = true;
+                        categoryCheckboxes.forEach(cb => cb.disabled = true);
+                    }
+                });
+            });
+        }
+        
+        // Save preferences
+        async function savePreferences() {
+            if (!userToken) {
+                alert('Please sign in to save preferences');
+                return;
+            }
+            
+            try {
+                const frequency = document.getElementById('frequency-select').value;
+                
+                // Get selected content types
+                const contentTypes = [];
+                const contentCheckboxes = document.querySelectorAll('input[type="checkbox"][id^="content-"]:checked');
+                contentCheckboxes.forEach(cb => contentTypes.push(cb.value));
+                
+                // Get selected categories
+                const categories = [];
+                const categoryCheckboxes = document.querySelectorAll('input[type="checkbox"][id^="category-"]:checked');
+                categoryCheckboxes.forEach(cb => categories.push(cb.value));
+                
+                const preferences = {
+                    frequency,
+                    content_types: contentTypes,
+                    categories
+                };
+                
+                const response = await fetch(`${window.ENV_API_URL}/subscription/preferences`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${userToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(preferences)
+                });
+                
+                if (response.ok) {
+                    alert('Preferences saved successfully!');
+                    closePreferences();
+                    localStorage.setItem('user_preferences', JSON.stringify(preferences));
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to save preferences');
+                }
+            } catch (error) {
+                console.error('Error saving preferences:', error);
+                alert('Failed to save preferences. Please try again.');
+            }
+        }
+        
+        // Initialize authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for saved authentication
+            const savedToken = localStorage.getItem('auth_token');
+            const savedUser = localStorage.getItem('user_data');
+            
+            if (savedToken && savedUser) {
+                try {
+                    userToken = savedToken;
+                    currentUser = JSON.parse(savedUser);
+                    updateAuthUI();
+                    loadUserPreferences();
+                } catch (error) {
+                    console.error('Error restoring session:', error);
+                    // Clear invalid data
+                    localStorage.removeItem('auth_token');
+                    localStorage.removeItem('user_data');
+                }
+            }
+            
+            // Initialize checkbox handlers
+            setTimeout(handleAllCheckboxes, 100);
+        });
+        
+        // Close modal when clicking overlay
+        document.getElementById('preferences-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePreferences();
+            }
+        });
     </script>
 </body>
 </html>

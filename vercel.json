@@ -1,17 +1,8 @@
 {
   "version": 2,
-  "functions": {
-    "api/digest.js": {
-      "maxDuration": 30
-    }
-  },
-  "env": {
-    "CLAUDE_API_KEY": "@claude_api_key",
-    "BACKEND_API_URL": "@backend_api_url"
-  },
   "build": {
     "env": {
-      "NEXT_PUBLIC_API_URL": "$BACKEND_API_URL"
+      "NEXT_PUBLIC_API_URL": "https://ai-news-scraper.vercel.app"
     }
   },
   "headers": [
