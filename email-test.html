@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Test - AI Daily</title>
+    <script src="env.config.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f8fafc;
+        }
+        
+        .test-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: background 0.2s;
+        }
+        
+        .test-button:hover {
+            background: #2563eb;
+        }
+        
+        .test-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        
+        .results {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+        }
+        
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        .warning { color: #f59e0b; }
+        
+        .input-group {
+            margin: 10px 0;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        
+        pre {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧪 AI Daily Email Testing</h1>
+        <p>Test your email digest system configuration and sending</p>
+    </div>
+    
+    <div class="test-section">
+        <h2>📋 System Configuration Test</h2>
+        <p>Check if your email service is properly configured</p>
+        <button class="test-button" onclick="testConfiguration()">Test Configuration</button>
+        <div id="config-results" class="results" style="display: none;"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📧 Send Test Email</h2>
+        <p>Send a test digest email to any address</p>
+        <div class="input-group">
+            <label for="test-email">Email Address:</label>
+            <input type="email" id="test-email" placeholder="test@example.com" required>
+        </div>
+        <button class="test-button" onclick="sendTestEmail()" id="send-btn">Send Test Email</button>
+        <div id="send-results" class="results" style="display: none;"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>👁️ Preview Email Template</h2>
+        <p>Generate and preview the email HTML template</p>
+        <button class="test-button" onclick="previewEmail()">Preview Email</button>
+        <div id="preview-results" class="results" style="display: none;"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔐 Authentication Status</h2>
+        <p id="auth-status" class="warning">Not authenticated - Sign in to test email features</p>
+        <button class="test-button" onclick="signInWithGoogle()" id="signin-btn">Sign In with Google</button>
+    </div>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+    <script>
+        let userToken = null;
+        let currentUser = null;
+        
+        // Initialize Google Sign-In
+        window.onload = function() {
+            // Check for existing auth
+            const savedToken = localStorage.getItem('auth_token');
+            const savedUser = localStorage.getItem('user_data');
+            
+            if (savedToken && savedUser) {
+                userToken = savedToken;
+                currentUser = JSON.parse(savedUser);
+                updateAuthStatus();
+            }
+            
+            // Initialize Google Sign-In
+            if (typeof google !== 'undefined') {
+                google.accounts.id.initialize({
+                    client_id: window.ENV_CONFIG?.GOOGLE_CLIENT_ID,
+                    callback: handleGoogleSignIn
+                });
+            }
+        };
+        
+        function signInWithGoogle() {
+            if (typeof google !== 'undefined') {
+                google.accounts.id.prompt();
+            } else {
+                alert('Google Sign-In not available');
+            }
+        }
+        
+        function handleGoogleSignIn(response) {
+            fetch(`${window.ENV_API_URL}/auth/google`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: response.credential })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.access_token) {
+                    userToken = data.access_token;
+                    currentUser = data.user;
+                    localStorage.setItem('auth_token', userToken);
+                    localStorage.setItem('user_data', JSON.stringify(currentUser));
+                    updateAuthStatus();
+                }
+            })
+            .catch(err => console.error('Auth error:', err));
+        }
+        
+        function updateAuthStatus() {
+            const statusEl = document.getElementById('auth-status');
+            const signinBtn = document.getElementById('signin-btn');
+            
+            if (userToken && currentUser) {
+                statusEl.textContent = `✅ Authenticated as ${currentUser.name} (${currentUser.email})`;
+                statusEl.className = 'success';
+                signinBtn.style.display = 'none';
+            } else {
+                statusEl.textContent = '❌ Not authenticated - Sign in to test email features';
+                statusEl.className = 'error';
+                signinBtn.style.display = 'inline-block';
+            }
+        }
+        
+        async function testConfiguration() {
+            const resultsDiv = document.getElementById('config-results');
+            resultsDiv.style.display = 'block';
+            resultsDiv.innerHTML = '<p>⏳ Testing configuration...</p>';
+            
+            try {
+                const response = await fetch(`${window.ENV_API_URL}/email/test-setup`);
+                const data = await response.json();
+                
+                let html = '<h3>Configuration Test Results:</h3>';
+                
+                // Environment variables
+                html += '<h4>Environment Variables:</h4>';
+                for (const [key, value] of Object.entries(data.environment)) {
+                    html += `<p>${key}: ${value}</p>`;
+                }
+                
+                // Service status
+                html += '<h4>Email Service:</h4>';
+                for (const [key, value] of Object.entries(data.service_status)) {
+                    html += `<p>${key}: ${value}</p>`;
+                }
+                
+                // Template test
+                html += '<h4>Template Generation:</h4>';
+                for (const [key, value] of Object.entries(data.template_test)) {
+                    if (key !== 'error') {
+                        html += `<p>${key}: ${value}</p>`;
+                    }
+                }
+                
+                if (data.template_test.error) {
+                    html += `<p class="error">Template Error: ${data.template_test.error}</p>`;
+                }
+                
+                // Overall status
+                html += '<h4>Overall Status:</h4>';
+                const overallStatus = data.overall_status.ready_for_testing ? 
+                    '<span class="success">✅ Ready for email testing!</span>' : 
+                    '<span class="error">❌ Configuration needs attention</span>';
+                html += `<p>${overallStatus}</p>`;
+                
+                resultsDiv.innerHTML = html;
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `<p class="error">❌ Configuration test failed: ${error.message}</p>`;
+            }
+        }
+        
+        async function sendTestEmail() {
+            if (!userToken) {
+                alert('Please sign in first');
+                return;
+            }
+            
+            const emailInput = document.getElementById('test-email');
+            const emailAddress = emailInput.value.trim();
+            
+            if (!emailAddress) {
+                alert('Please enter an email address');
+                return;
+            }
+            
+            const resultsDiv = document.getElementById('send-results');
+            const sendBtn = document.getElementById('send-btn');
+            
+            resultsDiv.style.display = 'block';
+            resultsDiv.innerHTML = `<p>⏳ Sending test email to ${emailAddress}...</p>`;
+            sendBtn.disabled = true;
+            
+            try {
+                const response = await fetch(`${window.ENV_API_URL}/email/send-to-address?email_address=${encodeURIComponent(emailAddress)}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${userToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultsDiv.innerHTML = `<p class="success">✅ ${data.message}</p>`;
+                } else {
+                    resultsDiv.innerHTML = `<p class="error">❌ ${data.detail || 'Failed to send email'}</p>`;
+                }
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+            } finally {
+                sendBtn.disabled = false;
+            }
+        }
+        
+        async function previewEmail() {
+            if (!userToken) {
+                alert('Please sign in first');
+                return;
+            }
+            
+            const resultsDiv = document.getElementById('preview-results');
+            resultsDiv.style.display = 'block';
+            resultsDiv.innerHTML = '<p>⏳ Generating email preview...</p>';
+            
+            try {
+                const response = await fetch(`${window.ENV_API_URL}/email/preview-digest`, {
+                    headers: {
+                        'Authorization': `Bearer ${userToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultsDiv.innerHTML = `
+                        <p class="success">✅ Email template generated successfully!</p>
+                        <button class="test-button" onclick="openPreviewWindow()">Open Preview in New Window</button>
+                        <details>
+                            <summary>View HTML Source</summary>
+                            <pre>${data.html.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+                        </details>
+                    `;
+                    
+                    // Store HTML for preview window
+                    window.previewHTML = data.html;
+                    
+                } else {
+                    resultsDiv.innerHTML = `<p class="error">❌ ${data.detail || 'Failed to generate preview'}</p>`;
+                }
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+            }
+        }
+        
+        function openPreviewWindow() {
+            if (window.previewHTML) {
+                const previewWindow = window.open('', '_blank');
+                previewWindow.document.write(window.previewHTML);
+                previewWindow.document.close();
+            }
+        }
+    </script>
+</body>
+</html>

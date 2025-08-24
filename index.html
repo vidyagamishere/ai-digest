@@ -18,6 +18,10 @@
     <meta name="google-signin-client_id" content="450435096536-tbor1sbkbq27si62ps7khr5fdat5indb.apps.googleusercontent.com">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     
+    <!-- Security Policy (optional - reduces YouTube CORP warnings) -->
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="unsafe-none">
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
+    
     <style>
         :root {
             --primary: #2563eb;
@@ -1044,6 +1048,14 @@
                             <div class="dropdown-item" onclick="openPreferences()">
                                 <span>⚙️</span>
                                 <span>Preferences</span>
+                            </div>
+                            <div class="dropdown-item" onclick="sendTestDigest()">
+                                <span>📧</span>
+                                <span>Send Test Email</span>
+                            </div>
+                            <div class="dropdown-item" onclick="previewEmail()">
+                                <span>👁️</span>
+                                <span>Preview Email</span>
                             </div>
                             <div class="dropdown-item" onclick="signOut()">
                                 <span>🚪</span>
@@ -2409,6 +2421,67 @@
             // Initialize checkbox handlers
             setTimeout(handleAllCheckboxes, 100);
         });
+        
+        // Send test digest email
+        async function sendTestDigest() {
+            if (!userToken) {
+                alert('Please sign in to send test email');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${window.ENV_API_URL}/email/send-digest`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${userToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    alert('Test digest email sent successfully! Check your inbox.');
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to send email');
+                }
+            } catch (error) {
+                console.error('Error sending test digest:', error);
+                alert(`Failed to send test email: ${error.message}`);
+            }
+        }
+        
+        // Preview email digest
+        async function previewEmail() {
+            if (!userToken) {
+                alert('Please sign in to preview email');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${window.ENV_API_URL}/email/preview-digest`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${userToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Open preview in new window
+                    const previewWindow = window.open('', '_blank');
+                    previewWindow.document.write(data.html);
+                    previewWindow.document.close();
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to generate preview');
+                }
+            } catch (error) {
+                console.error('Error generating email preview:', error);
+                alert(`Failed to generate email preview: ${error.message}`);
+            }
+        }
         
         // Close modal when clicking overlay
         document.getElementById('preferences-modal').addEventListener('click', function(e) {
